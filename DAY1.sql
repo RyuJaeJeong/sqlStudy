@@ -77,4 +77,52 @@ SELECT sal + NVL(comm, 0)
     WHERE ename='KING';  
     
 --10. 비교연산자    
+
+
+--11. 비교연산자 BETWEEN AND
+
+SELECT ename, sal 
+    FROM emp 
+    WHERE sal BETWEEN 1000 AND 3000
+    ORDER BY  sal asc;
     
+SELECT ename, sal 
+    FROM emp 
+    WHERE sal NOT BETWEEN 1000 AND 3000
+    ORDER BY  sal asc;
+    
+-- BETWEEN 상한가 AND 하한가 여야한다. 반대의 경우에는 동작하지않는다. 
+
+SELECT ename, hiredate 
+    FROM emp 
+    WHERE hiredate between '1982/01/01' AND '1982/12/31';
+    
+--12. 비교연산자 LIKE 
+
+SELECT ename, sal
+    FROM emp
+    WHERE ename LIKE 'S%';
+    
+SELECT ename, sal
+    FROM emp
+    WHERE ename LIKE '_M%';
+
+--%는 와일드 카드. 이 자리에 어떠한 철자가 와도 상관없고 철자의 개수가 몇개든 관계없다는 뜻임.
+--%가 특수문자 퍼센트가아니라 와일드 카드로 사용되기 위해서는 LIKE 연산자를 사용해야
+--언더바(_) 는 어떠한 철자가 와도 관계없으나 자리수는 한자리여야 된다는 의미.
+
+--13. 비교연산자 IS NULL
+
+SELECT ename, comm 
+    FROM emp
+    WHERE comm is null;
+    
+--14. 비교연산자 IN
+
+SELECT ename, sal, job
+    FROM emp 
+    WHERE job in ('SALESMAN', 'ANALYST', 'MANAGER');
+    
+--이퀄 연산자는 하나의 값만 조회할 수 있는 반면 IN 연산자는 여러 리스트의 값을 조회할 수 있다.     
+
+--15. 논리연산자 and or not 
