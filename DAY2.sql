@@ -187,3 +187,90 @@ SELECT *
     FROM emp;
 
 --31.  날짜형으로 데이터 유형 변환하기 TO_DATE
+
+
+--32. 암시적 형 변환 이해하기 
+
+SELECT  ename, sal
+    FROM emp
+    WHERE sal = '3000';
+
+--숫자형을 '3000' 으로 문자형으로 비교하였음에도 불구하고 검색결과가 출력 됨을 알 수 있다.
+--이는 오라클이 알아서 '숫자형 = 숫자형' 으로 형 변환을 하기 때문에 에러가 발생하지 않고 검색되는 것이다. 
+
+--33. NULL 값 대신 다른 데이터 출력하기 (NVL, NVL2)
+
+ SELECT ename, comm, NVL(comm, 0)
+    FROM emp;
+
+ SELECT ename, sal, comm, sal+NVL(comm, 0)
+    FROM emp
+    WHERE job in('SALESMAN', 'ANALYST');
+    
+ SELECT ename, sal, NVL(comm, 0), NVL2(comm, sal+comm, sal)
+    FROM emp
+    WHERE job in('SALESMAN', 'ANALYST');   
+--34.   IF문을 SQL로 구현하기. (DECODE 함수)
+
+ SELECT ename, deptno, DECODE(deptno, 10, 300, 20, 400, 0) AS 보너스 
+    FROM emp;
+
+-- 부서번호가 10일때는 300, 20일때는 400 나머지는 0 as 보너스 
+
+ SELECT empno, mod(empno, 2) AS 나머지, DECODE(mod(empno, 2), 0, '짝수', 1, '홀수') AS 짝홀수
+    FROM emp;
+
+-- default 값은 생략 할 수도 있다.    
+
+--35. IF문을 SQL로 구현하기. (CASE)
+
+ SELECT ename, job, sal, CASE WHEN sal >= 3000 THEN 500
+                             WHEN sal >= 2000 THEN 300
+                             WHEN sal >= 1000 THEN 200
+                             ELSE 0 END AS BONUS
+    FROM emp
+    WHERE job IN ('SALESMAN', 'ANALYST');
+--36. 최댓값 출력하기 (MAX)
+
+ SELECT MAX(sal)
+    FROM emp;
+    
+ SELECT MAX(sal)
+    FROM emp
+    WHERE job = 'SALESMAN';
+ 
+--  SELECT job, MAX(sal)
+--    FROM emp
+--    WHERE job = 'SALESMAN';  
+-- job 칼럼은 여러 개의 행이 출력되려고 하는데 맥스 값은 하나가 출력 되려 하기때문에 에러가 뜬다. 
+
+ SELECT job, MAX(sal)
+    FROM emp
+    WHERE job = 'SALESMAN'
+    GROUP BY job;
+    
+--37. 최소값 출력하기 (MIN) 
+
+-- 그룹함수의 특징은 WHERE 절의 조건이 거짓이어도 결과를 항상  출력한다는 것이다. 
+
+--38. 평균값 출력하기 (AVG)
+
+SELECT AVG(comm)
+    FROM emp;
+
+--그룹함수는 널값을 무시한다. 그러니까 커미션 총합에서 14를 나눈것이 아니라 4를 나눈것이다.   
+
+--39. 토탈값 출력하기(SUM)
+
+SELECT job, sum(sal)
+    from emp
+    group by job;
+    
+SELECT job, SUM(sal)
+    FROM emp
+    GROUP BY job
+    HAVING sum(sal) >= 4000;
+
+--where 절에 그룹함수를 사용해 조건을 주면 그룹 함수 사용이 허가되지않는다고 뜬다. having 을 사용하여야한다. 
+
+--40. 건수 출력하기 COUNT (그룹함수는 null 값을 포함하지 않는다는 것을 유념해야한다. )
