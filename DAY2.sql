@@ -274,3 +274,79 @@ SELECT job, SUM(sal)
 --where 절에 그룹함수를 사용해 조건을 주면 그룹 함수 사용이 허가되지않는다고 뜬다. having 을 사용하여야한다. 
 
 --40. 건수 출력하기 COUNT (그룹함수는 null 값을 포함하지 않는다는 것을 유념해야한다. )
+
+
+--41. 데이터 분석 함수로 순위 출력하기 (RANK)
+
+SELECT ename, job, sal, RANK() over (ORDER BY sal DESC) 순위 
+    FROM emp
+    WHERE job in ('ANALYST','MANAGER');
+    
+   
+    
+SELECT ename, job, sal, RANK() over (PARTITION BY job
+                                     ORDER BY sal DESC) 순위 
+    FROM emp;
+--42. 데이터 분석 함수로 순위 출력하기 (DENSE_RANK)
+
+SELECT ename, job, sal, DENSE_RANK() over (ORDER BY sal DESC) 순위 
+    FROM emp
+    WHERE job in ('ANALYST','MANAGER');
+    
+SELECT ename, job, sal, DENSE_RANK() over (PARTITION BY job
+                                     ORDER BY sal DESC) 순위 
+    FROM emp;    
+--43. 데이터 분석 함수로 등급 출력하기 (NTILE)
+
+SELECT ename, job, sal, 
+       NTILE(4) over(order by sal desc nulls last) 등급
+    FROM emp
+    WHERE job in ('ANALYST','MANAGER','CLERK');
+    
+--NULLS LAST 를 사용했을 때는 NULL 값이 마지막으로 정렬됩니다.    
+
+--44.  데이터 분석 함수로 순위의 비율 출력하기 (CUME_DIST)
+
+SELECT ename, sal, RANK() over (order by sal desc) as RANK,
+                   DENSE_RANK() over (order by sal desc) as DENSE_RANK,
+                   TRUNC(CUME_DIST() over(order by sal desc), 2) as  CUM_DIST
+    FROM emp;
+
+SELECT ename, sal, job, RANK() over (PARTITION BY job order by sal desc) as RANK,
+                        TRUNC(CUME_DIST() over(PARTITION BY job order by sal desc), 2) as  CUM_DIST
+    FROM emp;
+
+--45. 데이터 분석 함수로 데이터를 가로로 출력하기(LISTAGG)
+
+SELECT job, LISTAGG(ename, '/') within group (ORDER BY sal desc) as EMPLOYEE,
+            LISTAGG(sal, '/') within group (ORDER BY sal desc) as SAL
+    FROM emp
+    GROUP BY job;
+
+SELECT job, LISTAGG(ename||'('||sal||')',',') within group (ORDER BY sal desc) as EMPLOYEE
+    FROM emp
+    GROUP BY job;    
+    
+--46. 데이터 분석 함수로 바로 전 행과 다음 행 출력하기 (LAG, LEAD)
+
+SELECT empno, ename, sal,
+            NVL(LAG(sal, 1) over (order by sal asc), 0) AS 전행,
+            LEAD(sal, 1) over (order by sal asc) "다음 행"
+    FROM emp
+    WHERE job in ('ANALYST','MANAGER');
+
+--47. SUM+DECODE 를 활용하여 COLUMN을 ROW로 출력하기 
+
+SELECT SUM(DECODE(job, 'ANALYST', sal)) as "ANALYST",
+       SUM(DECODE(job, 'CLERK', sal)) as "CLERK",
+       SUM(DECODE(job, 'MANAGER', sal)) as "MANAGER",
+       SUM(DECODE(job, 'SALESMAN', sal)) as "SALESMAN"
+    FROM emp;
+
+--48. PIVOT을 활용하여 COLUMN을 ROW로 출 력하기 
+
+SELECT *
+    FROM (select deptno, sal from emp)
+    PIVOT (sum(sal) for deptno in (10,20,30));
+
+--FROM 절에 괄호를 사용해서 특정 컬럼만 선택해야한다.    
