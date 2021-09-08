@@ -350,3 +350,15 @@ SELECT *
     PIVOT (sum(sal) for deptno in (10,20,30));
 
 --FROM 절에 괄호를 사용해서 특정 컬럼만 선택해야한다.    
+
+-- 정처기 실습용 쿼리 
+
+Create table 성적 (
+과목코드 number not null,
+과목이름 varchar2(50) not null,
+학점 varchar2(50) not null,
+점수 number not null);
+
+insert into 성적 values (1000, '운영체제', 'B', 80);
+
+SELECT 과목이름, MAX(점수) AS 최대점수, MIN(점수) AS 최소점수 FROM 성적 GROUP BY 과목이름 HAVING 과목이름 = '컴퓨터과학                          '
