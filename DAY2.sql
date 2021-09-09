@@ -335,7 +335,7 @@ SELECT empno, ename, sal,
     FROM emp
     WHERE job in ('ANALYST','MANAGER');
 
---47. SUM+DECODE 를 활용하여 COLUMN을 ROW로 출력하기 
+--47. SUM+DECODE 를 활용하여 ROW을 COLUMN로 출 력하기 
 
 SELECT SUM(DECODE(job, 'ANALYST', sal)) as "ANALYST",
        SUM(DECODE(job, 'CLERK', sal)) as "CLERK",
@@ -343,7 +343,7 @@ SELECT SUM(DECODE(job, 'ANALYST', sal)) as "ANALYST",
        SUM(DECODE(job, 'SALESMAN', sal)) as "SALESMAN"
     FROM emp;
 
---48. PIVOT을 활용하여 COLUMN을 ROW로 출 력하기 
+--48. PIVOT을 활용하여 ROW을 COLUMN로 출 력하기 
 
 SELECT *
     FROM (select deptno, sal from emp)
@@ -361,4 +361,93 @@ Create table 성적 (
 
 insert into 성적 values (1000, '운영체제', 'B', 80);
 
-SELECT 과목이름, MAX(점수) AS 최대점수, MIN(점수) AS 최소점수 FROM 성적 GROUP BY 과목이름 HAVING 과목이름 = '컴퓨터과학                          '
+SELECT 과목이름, MAX(점수) AS 최대점수, MIN(점수) AS 최소점수 FROM 성적 GROUP BY 과목이름 HAVING 과목이름 = '컴퓨터과학';
+
+
+
+
+--49. COLUMN TO ROW
+
+drop  table order2;
+
+create table order2
+( ename  varchar2(10),
+  bicycle  number(10),
+  camera   number(10),
+  notebook  number(10) );
+
+insert  into  order2  values('SMITH', 2,3,1);
+insert  into  order2  values('ALLEN',1,2,3 );
+insert  into  order2  values('KING',3,2,2 );
+
+commit;
+
+SELECT *
+    FROM order2;
+
+SELECT * 
+    FROM order2
+    UNPIVOT (건수 for 아이템 in (bicycle, camera, notebook));
+
+--NULL 값이 ROW에 포함되어있을 경우 결과가 출력되지않는다. 데이터에 NULL값이 포함되어 있는 경우, UNPIVOT INCLUDE NULLS 라고 써줘야한다. 
+    
+--50. 데이터 분석 함수로 누적 데이터 출력하기 (SUM OVER) 
+
+SELECT empno, ename, sal, SUM(sal) OVER(ORDER BY empno ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) 누적치
+    FROM emp
+    WHERE job in ('ANALYST', 'MANAGER');
+
+--  UNBOUNDED PRECEDING은 제일 첫 번째 행을 가리킵니다. BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW 란 제일 첫 번째 행부터 현재 행까지의 값을 말합니다. 
+--  참고로 UNBOUNDED FOLLOWING 은 맨 마지막 행을 가리킵니다. 
+
+--51. 데이터 분석 함수로 비율 출력하기 (RATIO_TO_REPORT) 
+
+SELECT empno, ename, sal, RATIO_TO_REPORT(sal) OVER () AS 비율 
+    FROM emp
+    WHERE deptno = 20;
+
+SELECT empno, ename, sal, RATIO_TO_REPORT(sal) OVER () AS 비율,
+                          SAL/SUM(sal) OVER() as "비교 비율"  
+    FROM emp
+    WHERE deptno = 20;    
+
+--52. 데이터 분석함수로 집계 결과 출력하기 -- 1 (ROLLUP)
+
+SELECT job, sum(sal)
+    FROM emp
+    GROUP BY ROLLUP(job);
+
+--ROLLUP 에 칼럼을 두개 사용한 경우. 
+
+SELECT deptno, job, sum(sal)
+    FROM emp
+    GROUP BY ROLLUP(deptno, job);
+    
+--53.  데이터 분석함수로 집계 결과 출력하기 -- 2 (CUBE)
+
+SELECT deptno,job, sum(sal)
+    FROM emp
+    GROUP BY CUBE(deptno,job);
+
+-- ROLLUP 집계와 CUBE 집계는 순서뿐만 아니라 출력결과도 다르다.!
+
+
+--54. 데이터 분석함수로 집계 결과 출력하기 --3 (GROUPING SETS)
+
+SELECT deptno, job, sum(sal)
+    FROM emp
+    GROUP BY GROUPING SETS((deptno), (job), ()); 
+
+--55. 데이터 분석 함수로 출력 결과 넘버링 하기 (ROW_NUMBER)
+
+SELECT empno, ename, sal, RANK() OVER(ORDER BY sal desc) RANK,
+                          DENSE_RANK() OVER(ORDER BY sal desc) DENSE_RANK,  
+                          ROW_NUMBER() OVER(ORDER BY sal desc) 번호
+    FROM emp;
+    
+-- 부서번호별로 파티션 줄 경우
+
+SELECT empno, ename, sal, RANK() OVER(PARTITION BY deptno ORDER BY sal desc) RANK,
+                          DENSE_RANK() OVER(PARTITION BY deptno ORDER BY sal desc) DENSE_RANK,  
+                          ROW_NUMBER() OVER(PARTITION BY deptno ORDER BY sal desc) 번호
+    FROM emp;
