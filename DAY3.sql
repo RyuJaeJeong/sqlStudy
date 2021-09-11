@@ -71,3 +71,84 @@ SELECT e.ename as 이름, e.job as 직업, e.sal as 월급, d.loc as "부서 위치"
  FROM emp e JOIN dept d
  ON (e.deptno = d.deptno)
  WHERE e.job = 'SALESMAN';
+ 
+--63. 여러 테이블의 데이터를 조인해서 출력하기 USING 
+SELECT e.ename as 이름, e.job as 직업, e.sal as 월급, d.loc as "부서 위치" 
+    FROM emp e join dept d
+    USING (deptno)
+    WHERE e.job='SALESMAN';
+
+--USING 절을 사용할때 DEPTNO 앞에는 테이블명이나 테이블 별칭을 사용 할 수 없습니다.
+--USING 절에는 반드시 괄호를 사용해야 합니다. 
+
+--여러개의 테이블을 조인하는 경우
+SELECT e.ename, d.loc, s.grade
+    FROM emp e
+    JOIN dept d USING (deptno)
+    JOIN salgrade s ON (e.sal between s.losal and s.hisal);
+    
+--64. 여러 테이블의 데이터를 조인해서 출력하기
+
+--NATURAL JOIN 은 두 테이블에 둘 다 존재하는 동일한 컬럼을 기반으로 암시적인 조인을 수행한다. 둘 다 존재하는 동일한 컬럼인 DEPTNO를 오라클이 알아서 찾아 이를 이용하여 조인을 수행한다. 
+SELECT e.ename as 이름, e.job as 직업, e.sal as 월급, d.loc as "부서 위치"
+    FROM emp e NATURAL join dept d
+    WHERE e.job = 'SALESMAN';
+
+--65. 여러 테이블의 데이터를 조인해서 출력하기(LEFT OUTER JOIN)
+
+SELECT e.ename as 이름, e.job as 직업, e.sal as 월급, d.loc as "부서 위치" 
+    FROM emp e  RIGHT OUTER JOIN dept d
+    USING (deptno);
+--66.  여러 테이블의 데이터를 조인해서 출력하기(FULL OUTER JOIN)
+
+INSERT INTO EMP (empno, ename, sal, job, deptno) values(8282, 'JACK', 3000, 'ANALYST', 50);
+COMMIT;
+
+SELECT e.ename as 이름, e.job as 직업, e.sal as 월급, d.loc as "부서 위치"
+    FROM emp e FULL OUTER JOIN dept d
+    ON (e.deptno = d.deptno);
+--오라클 표기법으로 full outer join 문을 작성 할 경우 에러가 발생합니다. 
+
+--67. 집합 연산자로 데이터를 위아래로 연결하기 (UNION ALL) 
+
+SELECT deptno, sum(sal)
+    FROM emp
+    GROUP BY deptno 
+UNION ALL
+SELECT TO_NUMBER(null) as deptno, sum(sal)
+    FROM emp;
+
+--위쪽 쿼리의 결과와 아래쪽 쿼리의 결과를 하나의 결과로 출력해준다.
+/*
+-union all 위쪽 쿼리와 아래쪽 쿼리 컬럼의 갯수가 동일해야합니다.
+-union all 위쪽 쿼리와 아래쪽 쿼리의 데이터 타입이 동일해야합니다.
+-결과로 출력되는 컬럼명은 위쪽 쿼리의 컬럼명으로 출력됩니다.
+-ORDER BY 절은 제일 아래쪽 쿼리에만 작성할수 있습니다.
+*/
+    
+
+--68. 집합 연산자로 데이터를 위아래로 연결하기 (UNION)
+
+SELECT deptno, sum(sal)
+    FROM emp
+    GROUP BY deptno 
+UNION
+SELECT null as deptno, sum(sal)
+    FROM emp;
+
+/*
+-중복된 데이터를 하나의 고유한 값으로 출력합니다.
+-첫번째 컬럼의 데이터를 기준으로 내림차순 정렬합니다.
+*/
+
+--69. 집합 연산자로 데이터를 위아래로 연결하기 (INTERSECT)
+
+SELECT ename, sal, job, deptno
+    FROM emp
+    WHERE deptno in (10, 20) 
+INTERSECT
+SELECT ename, sal, job, deptno
+    FROM emp
+    WHERE deptno in (20, 30);
+    
+--위쪽 쿼리와 아래쪽 쿼리 결과의 교집합만 출력된다.    
