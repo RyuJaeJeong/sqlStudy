@@ -152,3 +152,107 @@ SELECT ename, sal, job, deptno
     WHERE deptno in (20, 30);
     
 --위쪽 쿼리와 아래쪽 쿼리 결과의 교집합만 출력된다.    
+
+--70. 집합 연산자로 데이터의 차이를 출력하기(MINUS)
+
+SELECT ename, sal, job, deptno
+    FROM emp
+    WHERE deptno in (10, 20)
+MINUS
+SELECT ename, sal, job, deptno
+    FROM emp
+    WHERE deptno in (20, 30);
+    
+--마이너스 연산자를 이용하여 위쪽 쿼리의 결과 데이터에서 아래쪽 쿼리의 결과데이터의 차이를 출력하는 쿼리문이다. 
+--마이너스 연산자의 경우에도 데이터를 내림차순으로 정렬해준다
+
+--71. 서브쿼리 사용하기 1 -- 단일행 서브쿼리
+
+SELECT ename, sal
+    FROM emp
+    WHERE sal >= (SELECT sal 
+                    FROM emp
+                    WHERE ename = 'JONES')
+          AND ename != 'JONES';          
+          
+--JONES 보다 더 많은 월급을 받는 사원들을 검색하려면 먼저 JONES사원의 월급을 출력한후, SAL 과 비교하는 두번의 쿼리문 수행을 해야만한다.
+-- 서브쿼리를 통해 수행횟수를 1회로 줄일 수 있다.
+
+--72. 서브쿼리 사용하기 2 -- 다중행 서브쿼리
+
+SELECT ename, sal, job
+    FROM emp
+    WHERE sal in (SELECT sal FROM emp WHERE job = 'SALESMAN');
+    
+--서브쿼리 에서 메인쿼리로 하나의 값이 아니라 여러개의 값이 반환되는 것을 다중 행 서브쿼리라고 한다. 
+--71번의 경우 jones 의 월급을 반환할 뿐임으로 하나의값이 반환된다. 즉 단일행 서브쿼리.
+--그러나 72번의 경우 salesman이 한명이 아님으로 여러개의 값이 반환되는데 이를 다중 행 서브쿼리라한다. 
+--서브쿼리의 종류에 따라 사용되는 연산자도 다른대, 다중행 서브쿼리에서는 in, not in, >any <any, >all, <all 을 사용한다. 
+--참고로 반환되는 칼럼이 여러개일 경우 다중 컬럼 서브쿼리라고한다. 
+
+--73 서브쿼리 사용하기 3 -- not in
+
+--관리자가 아닌 사원들의 이름과 월급과 직업을 출력해보겠습니다.
+
+SELECT ename, sal, job
+    FROM emp
+    WHERE empno not in (SELECT mgr FROM emp WHERE mgr is not null);
+
+SELECT  distinct mgr
+    FROM emp
+    WHERE mgr is not null;
+    
+SELECT *
+    FROM emp;
+    
+--서브쿼리에서 메인쿼리로 null값이 하나라도 리턴되면 결과가 출력되지않는다.
+--논리적으로 true and null 은 null이기때문이다.
+
+--74. 서브쿼리 사용하기 4 -- exists 와 not exists
+
+SELECT *
+    FROM dept d
+    WHERE EXISTS (SELECT * 
+                    FROM emp e 
+                    WHERE e.deptno = d.deptno);
+
+SELECT *
+    FROM dept d
+    WHERE NOT EXISTS (SELECT * 
+                    FROM emp e 
+                    WHERE e.deptno = d.deptno);                    
+                    
+--75. 서브쿼리 사용하기5 (HAVING절의 서브쿼리 사용하기)
+
+SELECT job, sum(sal)
+    FROM emp
+    GROUP BY job 
+    HAVING sum(sal) > (SELECT sum(sal)
+                        FROM emp
+                        WHERE job='SALESMAN');
+
+--76. 서브쿼리 사용하기5 (FROM 절의 서브쿼리 사용하기)
+
+SELECT  v.ename, v.sal, v.순위
+    FROM (SELECT ename, sal, rank() over (order by sal desc) 순위 FROM emp) v
+    WHERE v.순위 =1;
+
+-- from 절의 서브쿼리를 in line view 라고한다.
+-- where 절에는 분석함수를 사용 할 수 없기때문에 from 절에 서브쿼리문을 사용하여 먼저 실행되게 해야한다.
+
+--77. 서브쿼리 사용하기7 (select절의 서브쿼리)
+
+SELECT ename, sal, (SELECT max(sal) FROM emp where job='SALESMAN') as "최대 월급",
+                   (SELECT min(sal) FROM emp where job='SALESMAN') as "최소 월급"
+    FROM emp
+    WHERE job='SALESMAN';
+    
+
+--78 데이터 입력하기 
+
+--데이터를 입력하고 수정하고 삭제하는 SQL문을 DML문이라고한다.
+
+INSERT INTO emp (empno, ename, sal, hiredate, job)
+    VALUES(2812, 'JACK', 3500, TO_DATE('2019/06/05', 'RRRR/MM/DD'), 'ANALYST');
+
+commit;    
