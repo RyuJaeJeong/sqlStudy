@@ -256,3 +256,66 @@ INSERT INTO emp (empno, ename, sal, hiredate, job)
     VALUES(2812, 'JACK', 3500, TO_DATE('2019/06/05', 'RRRR/MM/DD'), 'ANALYST');
 
 commit;    
+
+--79. 데이터 수정하기(UPDATE) 
+
+UPDATE emp
+    SET sal = 3200
+    WHERE ename='SCOTT';
+    
+--SET절에도 서브쿼리를 사용할 수 있다. 
+
+UPDATE emp
+    SET sal = (SELECT sal FROM emp WHERE ename='KING')
+    WHERE ename='SCOTT';
+    
+commit;    
+
+--80. 데이터 삭제하기
+
+--오라클에서 데이터를 삭제하는 명령에는 세가지가 있다.
+--DELETE 데이터 삭제
+--TRUNCATE 데이터를 모두 지우고 테이블구조만 남겨두는 것이다. 
+--DROP 테이블자체를 삭제한다. 
+
+--81. 데이터 저장 및 취소하기 (COMMIT, ROLLBACK) 
+--82. 데이터 입력, 수정, 삭제 한번에하기(MERGE) 
+
+ALTER TABLE emp
+ADD loc varchar2(10);
+
+MERGE INTO emp e
+USING dept d
+ON (e.deptno = d.deptno)
+WHEN MATCHED THEN
+UPDATE set e.loc = d.loc
+WHEN NOT MATCHED THEN
+INSERT (e.empno, e.deptno, e.loc) values (1111, d.deptno, d.loc);
+
+SELECT *
+    FROM emp;
+    
+--83. 락 이해하기(LOCK)     
+
+/*
+update문을 수행하면 update 대상이 되는 행을 잠궈버립니다.
+update는 행 전체를 잠그기 때문에 jones월급 뿐만 아니라 다른 컬럼들의 데이터도 변경 할 수 없고 waiting하게 됩니다.
+*/
+
+--84. select from update 절 이해하기.
+--85. 서브쿼리를 사용하여 데이터 입력하기. 
+
+CREATE TABLE emp2
+AS
+    SELECT *
+        FROM emp
+        WHERE 1=2;
+
+INSERT INTO emp2 (empno, ename, sal, deptno)
+    SELECT empno, ename, sal, deptno
+        FROM emp
+        WHERE deptno = 10;
+        
+SELECT *
+    FROM emp2;
+        
