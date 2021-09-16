@@ -318,4 +318,58 @@ INSERT INTO emp2 (empno, ename, sal, deptno)
         
 SELECT *
     FROM emp2;
-        
+    
+
+--86. 서브 쿼리를 사용하여 데이터 수정하기.    
+
+/*
+UPDATE emp
+    SET sal = ( SELECT sal FROM emp WHERE ename='ALLEN')
+    WHERE job = 'SALESMAN';
+    
+ROLLBACK;    
+직업이 SALESMAN 인 사월들의 월급을 ALLEN의 월급으로 갱신합니다.
+
+*/
+
+--87. 서브쿼리를 사용하여 데이터 삭제하기
+
+/*
+DELETE FROM emp 
+WHERE sal > (SELECT sal FROM emp WHERE ename = 'SCOTT');
+
+DELETE FROM emp m
+WHERE sal > (SELECT sal FROM emp s WHERE s.deptno = m.deptno);
+
+*/
+
+--88. 서브쿼리를 사용하여 데이터 합치기. 
+
+ALTER TABLE dept ADD sumsal number(10);
+
+MERGE INTO dept d
+USING (SELECT deptno, sum(sal) sumsal 
+            FROM emp
+            GROUP BY deptno) v 
+ON (d.deptno = v.deptno)
+WHEN MATCHED THEN
+UPDATE set d.sumsal = v.sumsal;
+
+--89. 계층형 질의문으로 서열을 주고 데이터 출력하기.1
+ SELECT rpad(' ', LEVEL*3) || ename as employee, level, sal, job
+    FROM emp
+    START WITH ename = 'KING'       --루트 노드의 데이터를 지정합니다.
+    CONNECT BY prior empno = mgr;   --부모노드와 자식노드의 관계를 지정하는 절. 
+--90. 계층형 질의문으로 서열을 주고 데이터 출력하기.2
+--CONNECT BY 절에 ename !=blake 를 주게 되면, 블레이크와 블레이크의 자식노드 모두 출력되지 않게 된다. 
+
+--91. 계층형 질의문으로 서열을 주고 데이터 출력하기.3 
+--ORDER BY SIBLINGS 를 사용하여 정렬하면 계층형 질의문의 서열 순서를 깨뜨리지 않으면서 출력 할 수 있다. 
+--사용하지 않으면 서열순서가 깨져서 출력된다.
+
+--92. 계층형 질의문으로 서열을 주고 데이터 출력하기.4 
+
+SELECT ename, SYS_CONNECT_BY_PATH(ename, '/') as path
+    FROM emp
+    START WITH ename='KING'
+    CONNECT BY prior empno = mgr;
