@@ -373,3 +373,100 @@ SELECT ename, SYS_CONNECT_BY_PATH(ename, '/') as path
     FROM emp
     START WITH ename='KING'
     CONNECT BY prior empno = mgr;
+    
+--93. 일반 테이블 생성하기
+CREATE TABLE EMP01(
+EMPNO NUMBER(10),
+ENAME VARCHAR2(10),
+SAL NUMBER(10,2),   -- 숫자 전체 10자리 허용하는데 그중 소숫점 2자리를 허용하겠다. 즉 소수점이 아닌 자리는 8자리까지만 허용되는 것이다.ㅔ
+HIREDATE DATE);
+
+/*
+테이블명, 컬럼명 지정시 규칙
+1. 반드시 문자로 시작해야합니다.
+2. 이름의 길이는 30자 이하여야합니다.
+3. 대문자 알파벳과 소문자 알파벳과 숫자를 포함할 수 있습니다.
+4. 특수문자는 $, _, #만 포함 할 수 있습니다.
+
+테이블 생성시 사용할 수 있는 주요 데이터 유형
+CHAR 고정길이 문자데이터 최대길이 2000
+VARCHAR2 가변길이 문자 데이터 유형 최대길이 4000
+LONG 가변길이 문자데이터 최대 2GB의 문자데이터를 허용한다.
+CLOB 문자 데이터 유형이며 최대 4GB의 문자 데이터를 허용합니다.
+BLOB 바이너리 데이터 유형 최대 4기가
+NUMBER
+DATE
+*/
+
+--94. 임시 테이블 생성하기.
+
+CREATE GLOBAL TEMPORARY TABLE EMP37(
+EMPNO NUMBER(10),
+ENAME VARCHAR2(10),
+SAL NUMBER(10,2))
+ON COMMIT DELETE ROWS;
+
+/*
+ON COMMIT DELETE ROWS : 임시 테이블에 데이터를 입력하고 COMMIT 할 때 까지만 데이터를 보관합니다.
+ON COMMIT PRESERVE ROWS : 임시 테이블에 데이터를 입력하고 세션이 종료될 때까지 데이터를 보관합니다. 그러니까 로그아웃하면 데이터 날아간다고
+*/
+--95.복잡한 쿼리를 단순하게 하기 (1) (VIEW)
+CREATE VIEW EMP_VIEW 
+    AS 
+    SELECT empno, ename, sal, job, deptno
+        FROM emp
+        WHERE job='SALESMAN';
+
+SELECT *
+    FROM EMP_VIEW;
+/*
+EMP_VIEW의 데이터를 수정하면 EMP 테이블의 데이터가 변경되었습니다. 
+VIEW는 데이터를 가지고 있지 않고 단순히 테이블을 바라보는 객체입니다.
+뷰를 쿼리하면 뷰를 만들때 작성했던 쿼리문이 수행되면서 실제 EMP테이블을 쿼리합니다.
+UPDATE 문도 마찬가지로 EMP_VIEW를 갱신하면 실제 테이블인 EMP 데이터가 갱신됩니다.
+*/    
+    
+        
+--96. 복잡한 쿼리를 단순하게 하기 (2) (VIEW)
+
+CREATE VIEW EMP_VIEW2
+AS
+SELECT deptno, round(avg(sal)) 평균월급
+    FROM emp
+    GROUP BY deptno;
+
+SELECT *
+    FROM EMP_VIEW2;
+
+/*
+함수나 그룹함수가 포함된 뷰를 복합 뷰라고 합니다. 
+복합 뷰의 결과데이터는 수정 할 수 없다.
+예를들어 EMP_VIEW2 의 평균월급을 수정할 수 있을까?
+말이 안되는 이야기이다.
+평균 월급이란 EMP테이블의 SAL을 연산한 결과이기때문이다.
+*/    
+    
+--97. 데이터 검색 속도를 높이기(INDEX) 
+CREATE INDEX EMP_SAL 
+ ON EMP(SAL);
+--98.  절대로 중복되지 않는 번호 만들기(SEQUENCE) 
+CREATE SEQUENCE SEQ1
+START WITH 1
+INCREMENT BY 1
+MAXVALUE 100
+NOCYCLE;
+
+
+--99. 실수로 지운 데이터 복구하기 (1) FLASHBACK QUERY 
+
+UPDATE EMP SET SAL = 5000 WHERE ENAME = 'KING';
+
+COMMIT;
+
+SELECT * FROM 
+    EMP;
+
+SELECT *
+    FROM EMP
+    AS OF TIMESTAMP(SYSTIMESTAMP - INTERVAL '5' MINUTE)
+    WHERE ENAME = 'KING';
