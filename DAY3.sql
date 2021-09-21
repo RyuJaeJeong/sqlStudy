@@ -470,3 +470,98 @@ SELECT *
     FROM EMP
     AS OF TIMESTAMP(SYSTIMESTAMP - INTERVAL '5' MINUTE)
     WHERE ENAME = 'KING';
+    
+--100. 실수로 지운 데이터 복구하기 (2) FLASHBACK TABLE
+
+ALTER TABLE emp ENABLE ROW MOVEMENT;
+
+SELECT  row_movement
+    FROM user_tables
+    WHERE table_name = 'EMP';
+
+DELETE FROM emp;
+
+
+FLASHBACK TABLE emp to TIMESTAMP (SYSTIMESTAMP - INTERVAL '5' MINUTE);
+
+commit;
+
+--101. 실수로 지운 데이터 복구하기 (2) FLASHBACK DROP
+
+DROP TABLE emp;
+
+commit;
+
+FLASHBACK TABLE emp TO BEFORE DROP;
+
+commit;
+
+--102. 실수로 지운 데이터 복구하기 (2) FLASHBACK VERSION QUERY 
+
+SELECT ename, sal, versions_starttime, versions_endtime, versions_operation 
+    FROM emp
+    VERSIONS BETWEEN TIMESTAMP
+        TO_TIMESTAMP('2021-09-21 17:00:00', 'RRRR-MM-DD HH24:MI:SS')
+        AND MAXVALUE
+    WHERE ename='KING'
+    ORDER BY versions_starttime;
+    
+--103. 실수로 지운 데이터 복구하기 (2) FLASHBACK TRANSACTION QUERY 
+commit;
+
+
+
+SELECT ename, sal, deptno
+    FROM emp
+    WHERE ename='KING';
+
+UPDATE EMP SET SAL = 8000 WHERE ENAME = 'KING';
+commit;
+UPDATE EMP SET deptno = 20 WHERE ENAME = 'KING';
+commit;
+select*from emp;
+
+SELECT versions_startscn, versions_endscn, versions_operation, sal, deptno
+    FROM emp
+    VERSIONS BETWEEN SCN MINVALUE AND MAXVALUE
+    WHERE ename='KING';
+
+/*SELECT undo_sql
+    FROM flashback_transaction_query
+    WHERE table_owner = 'c##financeRyu' AND table_name = 'EMP'
+    AND commit_scn between 4133819 AND 4134115
+    ORDER BY start_timestamp desc;    
+    
+    DB를 아카이브모드로 변경해줘야하나, 변경 후 오라클에 접속 할수없는 에러가 발생함. 아직까지 해결하지 못하고있음
+    */
+
+--104. 데이터의 품질 높이기(PRIMARY KEY)
+
+CREATE TABLE DEPT2 (
+DEPTNO NUMBER(10) CONSTRAINT DEPT2_DEPTNO_PK PRIMARY KEY,
+DNAME VARCHAR2(13),
+LOC VARCHAR2(10));
+
+COMMIT;
+
+--테이블에 생성된 제약을 확인하는 방법
+
+SELECT a.CONSTRAINT_NAME, a.CONSTRAINT_TYPE, b.COLUMN_NAME
+    FROM USER_CONSTRAINTS a, USER_CONS_COLUMNS b
+    WHERE a.TABLE_NAME = 'DEPT2'
+    AND a.CONSTRAINT_NAME = b.CONSTRAINT_NAME;
+    
+--105. 데이터의 품질 높이기(UNIQUE)
+
+CREATE TABLE DEPT3 (
+DEPTNO NUMBER(10) ,
+DNAME VARCHAR2(13) CONSTRAINT DEPT2_DEPTNO_UN UNIQUE,
+LOC VARCHAR2(10));
+
+SELECT a.CONSTRAINT_NAME, a.CONSTRAINT_TYPE, b.COLUMN_NAME
+    FROM USER_CONSTRAINTS a, USER_CONS_COLUMNS b
+    WHERE a.TABLE_NAME = 'DEPT3'
+    AND a.CONSTRAINT_NAME = b.CONSTRAINT_NAME;    
+
+--106. 데이터의 품질 높이기(NOT NULL)
+--107. 데이터의 품질 높이기(CHECK)
