@@ -60,4 +60,25 @@ WHERE rn >10;
 
 
 */
+
+
+--단일 항목 검색을 위한 쿼리문 작성. 
+SELECT *
+    FROM (SELECT
+    /*+INDEX_DESC(tbl_board pk_board) */ 
+    ROWNUM rn, tbl_board.*
+    FROM tbl_board
+    WHERE title like '%test%' and rownum <=20)
+WHERE rn >10;
+    
+--다중 항목 검색을 위한 쿼리문 작성. 
+--괄호안의 검색 조건이 우선적으로 동작해야한다.
+SELECT *
+    FROM (SELECT
+    /*+INDEX_DESC(tbl_board pk_board) */ 
+    ROWNUM rn, tbl_board.*
+    FROM tbl_board
+    WHERE (title like '%test%' or content like'%test%') and rownum <=20)
+WHERE rn >10;
+
     
