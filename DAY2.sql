@@ -1,5 +1,9 @@
 --16. ´ë¼Ò¹®ÀÚ º¯È¯ ÇÔ¼ö
 
+/*
+¹®ÀÚ ÇÔ¼ö : UPPER, LOWER INITCAP SUBSTR LENGTH CONCAT INSTR TRIM LAPD RPAD
+*/
+
 SELECT UPPER(ename), LOWER(ename), INITCAP(ename)
     FROM emp;
 
@@ -7,14 +11,18 @@ SELECT *
     FROM emp
     WHERE LOWER(ename) = 'scott';
 
---µ¥ÀÌÅÍ°¡ ´ë¹®ÀÚÀÎÁö ¼Ò¹®ÀÚ ÀÎÁö È®½ÇÇÏÁö ¾ÊÀ» ¶§ »ç¿ë ÇÒ ¼ö ÀÖ´Ù.     
-    
+-- µ¥ÀÌÅÍ°¡ ´ë¹®ÀÚÀÎÁö ¼Ò¹®ÀÚ ÀÎÁö È®½ÇÇÏÁö ¾ÊÀ» ¶§ »ç¿ë ÇÒ ¼ö ÀÖ´Ù.     
+-- MysqlÀÇ °æ¿ì¿¡´Â INITCAPÀÌ Á¦°øµÇÁö ¾Ê¾Æ¼­ ²À ÇÊ¿äÇÑ °æ¿ì º°µµÀÇ ÇÔ¼ö¸¦ ¸¸µé¾î »ç¿ëÇØ¾ßÇÑ´Ù.
     
 insert  into emp values(9999, UPPER('financeRyu'), UPPER('clerk'), 9999, sysdate, 5000, 0, 0);    
 
 --insert ¹®¿¡µµ »ç¿ë ÇÒ ¼ö ÀÖ´Ù. 
 
+
 --17. ¹®ÀÚ¿¡¼­ Æ¯Á¤ ¹®ÀÚ ÃßÃâÇÏ±â 
+
+--SUBSTR(A,B,C) A -- ÀÚ¸¦ ¹®ÀÚ¿­ B--½ÃÀÛ ÀÎµ¦½º C--B·ÎºÎÅÍ ¸î±ÛÀÚ ÀÚ¸¦ °ÍÀÎÁö.
+--MYSQL¿¡¼­´Â SUBSTR°ú SUBSTRING ¸ðµÎ »ç¿ë °¡´ÉÇÏ´Ù. 
 
 SELECT SUBSTR('SMITH', 1, 3) AS ±ÛÀÚ
     FROM DUAL;
@@ -33,6 +41,9 @@ SELECT SUBSTR(ename, 1, 3) AS ÀÌ¸§
 
 --18. ¹®ÀÚ¿­ÀÇ ±æÀÌ¸¦ Ãâ·ÂÇÏ±â 
 
+--MYSQLÀÇ °æ¿ì LENGTH CHAR_LENGTH°¡ÀÖ´Âµ¥ ÇÑ±ÛÀ» »ç¿ëÇÒ °æ¿ì°¡ ´Ù¸£´Ù
+--ÀüÀÚ´Â ¾È³çÀ» 6À¸·Î ¹ÝÈ¯ÇÏ°í, ÈÄÀÚ´Â ¾È³çÀ» 2·Î ¹ÝÈ¯ÇÑ´Ù
+
 SELECT ename, LENGTH(ename) AS ±ÛÀÚ¼ö
     FROM emp;
 
@@ -42,7 +53,7 @@ SELECT ename, LENGTH(ename) AS ±ÛÀÚ¼ö
 SELECT INSTR('SMITH','I') 
     FROM dual;
 
---ÀÌ°É ÀÀ¿ëÇÏ¸é ÀÌ·¸°Ôµµ ÇÒ ¼ö ÀÖ´Ù. 
+-- IÀÇ À§Ä¡°ªÀÎ 3¹ÝÈ¯ÇÔ. ÀÌ°É ÀÀ¿ëÇÏ¸é ÀÌ·¸°Ôµµ ÇÒ ¼ö ÀÖ´Ù. 
 
 SELECT SUBSTR('fb0982@NAVER.com', INSTR('fb0982@NAVER.com','@')+1) AS µµ¸ÞÀÎÁÖ¼Ò,
     SUBSTR('fb0982@NAVER.com',1, INSTR('fb0982@NAVER.com','@')-1) AS ¸ÞÀÏ¾ÆÀÌµð
@@ -53,12 +64,28 @@ SELECT SUBSTR('fb0982@NAVER.com', INSTR('fb0982@NAVER.com','@')+1) AS µµ¸ÞÀÎÁÖ¼Ò
 SELECT ename, REPLACE(sal, 0, '*')
     FROM emp;
 
-SELECT ename, REGEXP_REPLACE(sal, '[0-3]', '*') as salrary
+SELECT ename, REGEXP_REPLACE(sal, '[0-3]', '*') as salraryc
     FROM emp;    
 
---replace ÀÌ¿ëÇÏ¸é ÇÑ±¹ ÀÌ¸§ÀÇ µÎ¹øÂ°ÀÚ¸®¸¦ ·ù*Á¤ ÀÌ·¸°Ô ÂïÈ÷°Ô ¸¸µå´Â °ÍÀÌ °¡´ÉÇÏ´Ù. 
+--REGEXP_REPLACE Á¤±Ô½Ä ÇÔ¼öÀÓ
+/*
+-- ÇÑ±ÛÁ¦°Å SELECT REGEXP_REPLACE('abcd(1234)°¡³ª´Ù¶ó', '[°¡-ÆR]', '') AS nickname; 
+-- ¼ýÀÚÁ¦°Å SELECT REGEXP_REPLACE('abcd(1234)°¡³ª´Ù¶ó', '[0-9]', '') AS nickname; 
+-- ¿µ¹®Á¦°Å SELECT REGEXP_REPLACE('abcd(1234)°¡³ª´Ù¶ó', '[a-z]', '') AS nickname; 
+-- Æ¯¼ö¹®ÀÚÁ¦°Å (Æ¯Á¤¹®ÀÚ) SELECT REGEXP_REPLACE('abcd(1234)°¡³ª´Ù¶ó', '[`~!#$%^&*|\\\'\";:\/?]', '') AS nickname; 
+-- Æ¯¼ö¹®ÀÚÁ¦°Å (ÀüÃ¼) SELECT REGEXP_REPLACE('abcd(1234)°¡³ª´Ù¶ó', '[^[:alnum:][:space:]]+', '') AS nickname;
+*/
+
+ 
+
+/* 
+    SELECT REPLACE(ENAME, SUBSTR(ENAME, 2, 1), '*') AS "Àü±¤ÆÇ_ÀÌ¸§"
+        FROM test_ename;  
+*/
+--replace ÀÌ¿ëÇÏ¸é ÇÑ±¹ ÀÌ¸§ÀÇ µÎ¹øÂ°ÀÚ¸®¸¦ ·ù*Á¤ ÀÌ·¸°Ô ÂïÈ÷°Ô ¸¸µå´Â °ÍÀÌ °¡´ÉÇÏ´Ù.
 
 --21. Æ¯Á¤ Ã¶ÀÚ¸¦ N°³ ¸¸Å­ Ã¤¿ì±â 
+
 
 SELECT ename, LPAD(sal, 10, '*') as salary1, RPAD(sal, 10, '*') as salrary2
     FROM emp;
@@ -67,6 +94,7 @@ SELECT ename, LPAD(sal, 10, '*') as salary1, RPAD(sal, 10, '*') as salrary2
 
 SELECT ename, sal, lpad('¡á', round(sal/100), '¡á')  AS bar_chart
     FROM emp;
+
 
 --22. Ã¶ÀÚ Àß¶ó³»±â 
 
@@ -77,7 +105,6 @@ SELECT LTRIM(ename, SUBSTR(ename, 1, 1)), RTRIM(ename, SUBSTR(ename, -1, 1))
     FROM emp;
 
 --trim ÀÇ °æ¿ì ¾çÂÊ ¹æÇâ s Àß¶ó¼­Ãâ·ÂÇÑ´Ù. °ø¹é Ã¼Å©ÇÏ´Â ¿ëµµ·Îµµ »ç¿ë ÇÒ ¼ö ÀÖ´Ù.     
-
 
 
 
@@ -419,7 +446,7 @@ SELECT job, sum(sal)
 
 --ROLLUP ¿¡ Ä®·³À» µÎ°³ »ç¿ëÇÑ °æ¿ì. 
 
-SELECT deptno, job, sum(sal)
+SELECT deptno, job, sum(sal) 
     FROM emp
     GROUP BY ROLLUP(deptno, job);
     
