@@ -112,9 +112,19 @@ SELECT LTRIM(ename, SUBSTR(ename, 1, 1)), RTRIM(ename, SUBSTR(ename, -1, 1))
 
 SELECT sal, ROUND(sal/100)
     FROM emp;
+
+SELECT '876.567' as 숫자, ROUND(876.567, 1)
+    FROM dual;
+
+/*
+    8  7  6 . 5  6  7
+   -3 -2 -1   1  2  3
+*/
     
     
---24.  숫자를 버리고 출력하기
+-- 24.  숫자를 버리고 출력하기
+
+-- mysql은 truncate 
 
 SELECT '876.567' AS 숫자, TRUNC(876.567,1)
     FROM dual;
@@ -142,14 +152,36 @@ SELECT empno,ename
     FROM emp
     WHERE  MOD(empno, 2) = 1;
     
---참고로 몫은 FLOOR함수를 이용한다
+-- 참고로 몫은 FLOOR함수를 이용한다
+
 
 SELECT FLOOR(10/3)
-    FROM dual;_
+    FROM dual;
+-- mysql의 경우 FLOOR함수는 작거나 가장 큰 정수를 반환하는 의미로 쓰인다. 오라클이랑 다른의미의 함수임.
+
 
 --26. 날짜 간 개월 수 출력하기 
 
-SELECT ename, TRUNC(MONTHS_BETWEEN(sysdate, hiredate))
+-- MONTHS_BETWEEN(최신날짜, 예전날짜)
+
+/*
+
+ TIMESTAMPDIFF(단위, 날짜1, 날짜2) 
+ MYSQL은 이렇게 한다.
+ 단위
+ SECOND : 초
+ MINUTE : 분
+ HOUR : 시
+ DAY : 일
+ WEEK : 주
+ MONTH : 월
+ QUARTER : 분기
+ YEAR : 연
+
+ 
+*/
+
+SELECT ename, MONTHS_BETWEEN(sysdate, hiredate)
     FROM emp;
 
 --날짜간 일수는 이렇게 계산한다.
@@ -178,11 +210,39 @@ SELECT TO_DATE('2021-05-01', 'RRRR-MM-DD') + interval '1-3' year(1) to month
 SELECT TO_DATE('2021-05-01', 'RRRR-MM-DD') + TO_YMINTERVAL('03-05') AS 날짜
     FROM dual;
 
+--MYSQL은 이렇게 사용한다.
+/*
+
+ADDDATE(date, INTERVAL value addunit)
+
+MICROSECOND
+SECOND
+MINUTE
+HOUR
+DAY
+WEEK
+MONTH
+QUARTER
+YEAR
+SECOND_MICROSECOND
+MINUTE_MICROSECOND
+MINUTE_SECOND
+HOUR_MICROSECOND
+HOUR_SECOND
+HOUR_MINUTE
+DAY_MICROSECOND
+DAY_SECOND
+DAY_MINUTE
+DAY_HOUR
+YEAR_MONTH
+
+*/
 
 
 --28.   특정 날짜 뒤에 오는 요일 날짜 출력하기
 
 -- 2019년 5월 22일 로부터 바로 돌아올 월요일의 날짜가 어떻게되는지 출력해보자. 
+-- MYSQL에서는 지원하지 않는 기능.
 
 SELECT '2021/09/03' as 날짜, NEXT_DAY('2021/09/03', '월요일') as "다음 월요일" 
     FROM DUAL;
@@ -190,13 +250,19 @@ SELECT '2021/09/03' as 날짜, NEXT_DAY('2021/09/03', '월요일') as "다음 월요일"
 
 --29.  특정 날짜가 있는 달의 마지막 날짜 출력하기
 
+-- MYSQL에서 지원하는 기능
+
 SELECT '2021/09/03' as 날짜, LAST_DAY('2021/09/03') as "마지막 날짜"
     FROM dual;
     
 SELECT TRUNC(LAST_DAY('2021/09/03') - sysdate) AS 남은날
     FROM dual;
 
+
+
 --30.  문자형으로 데이터 유형 변환하기
+
+-- MYSQL FORMAT, CHAR_FORMAT 으로 대체
 
 SELECT ename, TO_CHAR(hiredate, 'DAY') as 요일, TO_CHAR(sal, '999,999') as 월급
     FROM emp;
