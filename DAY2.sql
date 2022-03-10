@@ -293,6 +293,11 @@ SELECT  ename, sal
 
 --33. NULL 값 대신 다른 데이터 출력하기 (NVL, NVL2)
 
+-- Mysql IFNULL함수.
+
+SELECT COMM 
+    FROM EMP;
+
  SELECT ename, comm, NVL(comm, 0)
     FROM emp;
 
@@ -303,6 +308,8 @@ SELECT  ename, sal
  SELECT ename, sal, NVL(comm, 0), NVL2(comm, sal+comm, sal)
     FROM emp
     WHERE job in('SALESMAN', 'ANALYST');   
+    
+    
 --34.   IF문을 SQL로 구현하기. (DECODE 함수)
 
  SELECT ename, deptno, DECODE(deptno, 10, 300, 20, 400, 0) AS 보너스 
@@ -315,7 +322,14 @@ SELECT  ename, sal
 
 -- default 값은 생략 할 수도 있다.    
 
+-- Mysql에는 if함수가 있다
+
+-- IF(조건,'조건이 일치할 경우의 VALUE','조건이 일치하지 않을경우의 VALUE')
+
+
 --35. IF문을 SQL로 구현하기. (CASE)
+
+-- Mysql에서도 사용 할 수 있다.
 
  SELECT ename, job, sal, CASE WHEN sal >= 3000 THEN 500
                              WHEN sal >= 2000 THEN 300
@@ -323,6 +337,8 @@ SELECT  ename, sal
                              ELSE 0 END AS BONUS
     FROM emp
     WHERE job IN ('SALESMAN', 'ANALYST');
+    
+    
 --36. 최댓값 출력하기 (MAX)
 
  SELECT MAX(sal)
