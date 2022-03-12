@@ -1,7 +1,7 @@
---16. ´ë¼Ò¹®ÀÚ º¯È¯ ÇÔ¼ö
+--  16. ëŒ€ì†Œë¬¸ìž ë³€í™˜ í•¨ìˆ˜
 
 /*
-¹®ÀÚ ÇÔ¼ö : UPPER, LOWER INITCAP SUBSTR LENGTH CONCAT INSTR TRIM LAPD RPAD
+ë¬¸ìž í•¨ìˆ˜ : UPPER, LOWER INITCAP SUBSTR LENGTH CONCAT INSTR TRIM LAPD RPAD
 */
 
 SELECT UPPER(ename), LOWER(ename), INITCAP(ename)
@@ -11,55 +11,55 @@ SELECT *
     FROM emp
     WHERE LOWER(ename) = 'scott';
 
--- µ¥ÀÌÅÍ°¡ ´ë¹®ÀÚÀÎÁö ¼Ò¹®ÀÚ ÀÎÁö È®½ÇÇÏÁö ¾ÊÀ» ¶§ »ç¿ë ÇÒ ¼ö ÀÖ´Ù.     
--- MysqlÀÇ °æ¿ì¿¡´Â INITCAPÀÌ Á¦°øµÇÁö ¾Ê¾Æ¼­ ²À ÇÊ¿äÇÑ °æ¿ì º°µµÀÇ ÇÔ¼ö¸¦ ¸¸µé¾î »ç¿ëÇØ¾ßÇÑ´Ù.
+--  ë°ì´í„°ê°€ ëŒ€ë¬¸ìžì¸ì§€ ì†Œë¬¸ìž ì¸ì§€ í™•ì‹¤í•˜ì§€ ì•Šì„ ë•Œ ì‚¬ìš© í•  ìˆ˜ ìžˆë‹¤.     
+--  Mysqlì˜ ê²½ìš°ì—ëŠ” INITCAPì´ ì œê³µë˜ì§€ ì•Šì•„ì„œ ê¼­ í•„ìš”í•œ ê²½ìš° ë³„ë„ì˜ í•¨ìˆ˜ë¥¼ ë§Œë“¤ì–´ ì‚¬ìš©í•´ì•¼í•œë‹¤.
     
 insert  into emp values(9999, UPPER('financeRyu'), UPPER('clerk'), 9999, sysdate, 5000, 0, 0);    
 
---insert ¹®¿¡µµ »ç¿ë ÇÒ ¼ö ÀÖ´Ù. 
+--  insert ë¬¸ì—ë„ ì‚¬ìš© í•  ìˆ˜ ìžˆë‹¤. 
 
 
---17. ¹®ÀÚ¿¡¼­ Æ¯Á¤ ¹®ÀÚ ÃßÃâÇÏ±â 
+--  17. ë¬¸ìžì—ì„œ íŠ¹ì • ë¬¸ìž ì¶”ì¶œí•˜ê¸° 
 
---SUBSTR(A,B,C) A -- ÀÚ¸¦ ¹®ÀÚ¿­ B--½ÃÀÛ ÀÎµ¦½º C--B·ÎºÎÅÍ ¸î±ÛÀÚ ÀÚ¸¦ °ÍÀÎÁö.
---MYSQL¿¡¼­´Â SUBSTR°ú SUBSTRING ¸ðµÎ »ç¿ë °¡´ÉÇÏ´Ù. 
+-- SUBSTR(A,B,C) A --  ìžë¥¼ ë¬¸ìžì—´ B-- ì‹œìž‘ ì¸ë±ìŠ¤ C-- Bë¡œë¶€í„° ëª‡ê¸€ìž ìžë¥¼ ê²ƒì¸ì§€.
+-- MYSQLì—ì„œëŠ” SUBSTRê³¼ SUBSTRING ëª¨ë‘ ì‚¬ìš© ê°€ëŠ¥í•˜ë‹¤. 
 
-SELECT SUBSTR('SMITH', 1, 3) AS ±ÛÀÚ
+SELECT SUBSTR('SMITH', 1, 3) AS ê¸€ìž
     FROM DUAL;
 
-SELECT SUBSTR('SMITH', 2, 2) AS ±ÛÀÚ
+SELECT SUBSTR('SMITH', 2, 2) AS ê¸€ìž
     FROM DUAL;
 
-SELECT SUBSTR('SMITH', -2, 2) AS ±ÛÀÚ
+SELECT SUBSTR('SMITH', -2, 2) AS ê¸€ìž
     FROM DUAL;    
     
-SELECT SUBSTR('SMITH', 2) AS ±ÛÀÚ
+SELECT SUBSTR('SMITH', 2) AS ê¸€ìž
     FROM DUAL;
 
-SELECT SUBSTR(ename, 1, 3) AS ÀÌ¸§
+SELECT SUBSTR(ename, 1, 3) AS ì´ë¦„
     FROM emp;
 
---18. ¹®ÀÚ¿­ÀÇ ±æÀÌ¸¦ Ãâ·ÂÇÏ±â 
+-- 18. ë¬¸ìžì—´ì˜ ê¸¸ì´ë¥¼ ì¶œë ¥í•˜ê¸° 
 
---MYSQLÀÇ °æ¿ì LENGTH CHAR_LENGTH°¡ÀÖ´Âµ¥ ÇÑ±ÛÀ» »ç¿ëÇÒ °æ¿ì°¡ ´Ù¸£´Ù
---ÀüÀÚ´Â ¾È³çÀ» 6À¸·Î ¹ÝÈ¯ÇÏ°í, ÈÄÀÚ´Â ¾È³çÀ» 2·Î ¹ÝÈ¯ÇÑ´Ù
+-- MYSQLì˜ ê²½ìš° LENGTH CHAR_LENGTHê°€ìžˆëŠ”ë° í•œê¸€ì„ ì‚¬ìš©í•  ê²½ìš°ê°€ ë‹¤ë¥´ë‹¤
+-- ì „ìžëŠ” ì•ˆë…•ì„ 6ìœ¼ë¡œ ë°˜í™˜í•˜ê³ , í›„ìžëŠ” ì•ˆë…•ì„ 2ë¡œ ë°˜í™˜í•œë‹¤
 
-SELECT ename, LENGTH(ename) AS ±ÛÀÚ¼ö
+SELECT ename, LENGTH(ename) AS ê¸€ìžìˆ˜
     FROM emp;
 
 
---19. ¹®ÀÚ¿¡¼­ Æ¯Á¤ Ã¶ÀÚÀÇ À§Ä¡¸¦ Ãâ·ÂÇÏ±â
+-- 19. ë¬¸ìžì—ì„œ íŠ¹ì • ì² ìžì˜ ìœ„ì¹˜ë¥¼ ì¶œë ¥í•˜ê¸°
 
 SELECT INSTR('SMITH','I') 
     FROM dual;
 
--- IÀÇ À§Ä¡°ªÀÎ 3¹ÝÈ¯ÇÔ. ÀÌ°É ÀÀ¿ëÇÏ¸é ÀÌ·¸°Ôµµ ÇÒ ¼ö ÀÖ´Ù. 
+--  Iì˜ ìœ„ì¹˜ê°’ì¸ 3ë°˜í™˜í•¨. ì´ê±¸ ì‘ìš©í•˜ë©´ ì´ë ‡ê²Œë„ í•  ìˆ˜ ìžˆë‹¤. 
 
-SELECT SUBSTR('fb0982@NAVER.com', INSTR('fb0982@NAVER.com','@')+1) AS µµ¸ÞÀÎÁÖ¼Ò,
-    SUBSTR('fb0982@NAVER.com',1, INSTR('fb0982@NAVER.com','@')-1) AS ¸ÞÀÏ¾ÆÀÌµð
+SELECT SUBSTR('fb0982@NAVER.com', INSTR('fb0982@NAVER.com','@')+1) AS ë„ë©”ì¸ì£¼ì†Œ,
+    SUBSTR('fb0982@NAVER.com',1, INSTR('fb0982@NAVER.com','@')-1) AS ë©”ì¼ì•„ì´ë””
     FROM dual;
 
---20. Æ¯Á¤ Ã¶ÀÚ¸¦ ´Ù¸¥ Ã¶ÀÚ·Î º¯°æÇÏ±â.
+-- 20. íŠ¹ì • ì² ìžë¥¼ ë‹¤ë¥¸ ì² ìžë¡œ ë³€ê²½í•˜ê¸°.
 
 SELECT ename, REPLACE(sal, 0, '*')
     FROM emp;
@@ -67,36 +67,36 @@ SELECT ename, REPLACE(sal, 0, '*')
 SELECT ename, REGEXP_REPLACE(sal, '[0-3]', '*') as salraryc
     FROM emp;    
 
---REGEXP_REPLACE Á¤±Ô½Ä ÇÔ¼öÀÓ
+-- REGEXP_REPLACE ì •ê·œì‹ í•¨ìˆ˜ìž„
 /*
--- ÇÑ±ÛÁ¦°Å SELECT REGEXP_REPLACE('abcd(1234)°¡³ª´Ù¶ó', '[°¡-ÆR]', '') AS nickname; 
--- ¼ýÀÚÁ¦°Å SELECT REGEXP_REPLACE('abcd(1234)°¡³ª´Ù¶ó', '[0-9]', '') AS nickname; 
--- ¿µ¹®Á¦°Å SELECT REGEXP_REPLACE('abcd(1234)°¡³ª´Ù¶ó', '[a-z]', '') AS nickname; 
--- Æ¯¼ö¹®ÀÚÁ¦°Å (Æ¯Á¤¹®ÀÚ) SELECT REGEXP_REPLACE('abcd(1234)°¡³ª´Ù¶ó', '[`~!#$%^&*|\\\'\";:\/?]', '') AS nickname; 
--- Æ¯¼ö¹®ÀÚÁ¦°Å (ÀüÃ¼) SELECT REGEXP_REPLACE('abcd(1234)°¡³ª´Ù¶ó', '[^[:alnum:][:space:]]+', '') AS nickname;
+--  í•œê¸€ì œê±° SELECT REGEXP_REPLACE('abcd(1234)ê°€ë‚˜ë‹¤ë¼', '[ê°€-R]', '') AS nickname; 
+--  ìˆ«ìžì œê±° SELECT REGEXP_REPLACE('abcd(1234)ê°€ë‚˜ë‹¤ë¼', '[0-9]', '') AS nickname; 
+--  ì˜ë¬¸ì œê±° SELECT REGEXP_REPLACE('abcd(1234)ê°€ë‚˜ë‹¤ë¼', '[a-z]', '') AS nickname; 
+--  íŠ¹ìˆ˜ë¬¸ìžì œê±° (íŠ¹ì •ë¬¸ìž) SELECT REGEXP_REPLACE('abcd(1234)ê°€ë‚˜ë‹¤ë¼', '[`~!#$%^&*|\\\'\";:\/?]', '') AS nickname; 
+--  íŠ¹ìˆ˜ë¬¸ìžì œê±° (ì „ì²´) SELECT REGEXP_REPLACE('abcd(1234)ê°€ë‚˜ë‹¤ë¼', '[^[:alnum:][:space:]]+', '') AS nickname;
 */
 
  
 
 /* 
-    SELECT REPLACE(ENAME, SUBSTR(ENAME, 2, 1), '*') AS "Àü±¤ÆÇ_ÀÌ¸§"
+    SELECT REPLACE(ENAME, SUBSTR(ENAME, 2, 1), '*') AS "ì „ê´‘íŒ_ì´ë¦„"
         FROM test_ename;  
 */
---replace ÀÌ¿ëÇÏ¸é ÇÑ±¹ ÀÌ¸§ÀÇ µÎ¹øÂ°ÀÚ¸®¸¦ ·ù*Á¤ ÀÌ·¸°Ô ÂïÈ÷°Ô ¸¸µå´Â °ÍÀÌ °¡´ÉÇÏ´Ù.
+-- replace ì´ìš©í•˜ë©´ í•œêµ­ ì´ë¦„ì˜ ë‘ë²ˆì§¸ìžë¦¬ë¥¼ ë¥˜*ì • ì´ë ‡ê²Œ ì°ížˆê²Œ ë§Œë“œëŠ” ê²ƒì´ ê°€ëŠ¥í•˜ë‹¤.
 
---21. Æ¯Á¤ Ã¶ÀÚ¸¦ N°³ ¸¸Å­ Ã¤¿ì±â 
+-- 21. íŠ¹ì • ì² ìžë¥¼ Nê°œ ë§Œí¼ ì±„ìš°ê¸° 
 
 
 SELECT ename, LPAD(sal, 10, '*') as salary1, RPAD(sal, 10, '*') as salrary2
     FROM emp;
 
--- LPAD sal ±ÛÀÚ¼ö ÃÑ 10µÇµµ·Ï ¸ðÀÚ¸£´Â ºÎºÐ *·Î Ã¤¿ö ³Ö¾î¶ó. ÀÌ°É ÀÀ¿ëÇÏ¸é ¾Æ·¡¿Í °°ÀÌ µ¥ÀÌÅÍ ½Ã°¢È­¸¦ ÇÏ´Â °ÍÀÌ °¡´ÉÇÏ´Ù. 
+--  LPAD sal ê¸€ìžìˆ˜ ì´ 10ë˜ë„ë¡ ëª¨ìžë¥´ëŠ” ë¶€ë¶„ *ë¡œ ì±„ì›Œ ë„£ì–´ë¼. ì´ê±¸ ì‘ìš©í•˜ë©´ ì•„ëž˜ì™€ ê°™ì´ ë°ì´í„° ì‹œê°í™”ë¥¼ í•˜ëŠ” ê²ƒì´ ê°€ëŠ¥í•˜ë‹¤. 
 
-SELECT ename, sal, lpad('¡á', round(sal/100), '¡á')  AS bar_chart
+SELECT ename, sal, lpad('â– ', round(sal/100), 'â– ')  AS bar_chart
     FROM emp;
 
 
---22. Ã¶ÀÚ Àß¶ó³»±â 
+-- 22. ì² ìž ìž˜ë¼ë‚´ê¸° 
 
 SELECT 'smith', LTRIM('smith', SUBSTR('smith', 1, 1)), RTRIM('smith', 'h'), TRIM('s' from 'smiths')
     FROM dual;
@@ -104,16 +104,16 @@ SELECT 'smith', LTRIM('smith', SUBSTR('smith', 1, 1)), RTRIM('smith', 'h'), TRIM
 SELECT LTRIM(ename, SUBSTR(ename, 1, 1)), RTRIM(ename, SUBSTR(ename, -1, 1))
     FROM emp;
 
---trim ÀÇ °æ¿ì ¾çÂÊ ¹æÇâ s Àß¶ó¼­Ãâ·ÂÇÑ´Ù. °ø¹é Ã¼Å©ÇÏ´Â ¿ëµµ·Îµµ »ç¿ë ÇÒ ¼ö ÀÖ´Ù.     
+-- trim ì˜ ê²½ìš° ì–‘ìª½ ë°©í–¥ s ìž˜ë¼ì„œì¶œë ¥í•œë‹¤. ê³µë°± ì²´í¬í•˜ëŠ” ìš©ë„ë¡œë„ ì‚¬ìš© í•  ìˆ˜ ìžˆë‹¤.     
 
 
 
---23.  ¹Ý¿Ã¸²ÇØ¼­ Ãâ·ÂÇÏ±â 
+-- 23.  ë°˜ì˜¬ë¦¼í•´ì„œ ì¶œë ¥í•˜ê¸° 
 
 SELECT sal, ROUND(sal/100)
     FROM emp;
 
-SELECT '876.567' as ¼ýÀÚ, ROUND(876.567, 1)
+SELECT '876.567' as ìˆ«ìž, ROUND(876.567, 1)
     FROM dual;
 
 /*
@@ -122,61 +122,61 @@ SELECT '876.567' as ¼ýÀÚ, ROUND(876.567, 1)
 */
     
     
--- 24.  ¼ýÀÚ¸¦ ¹ö¸®°í Ãâ·ÂÇÏ±â
+--  24.  ìˆ«ìžë¥¼ ë²„ë¦¬ê³  ì¶œë ¥í•˜ê¸°
 
--- mysqlÀº truncate 
+--  mysqlì€ truncate 
 
-SELECT '876.567' AS ¼ýÀÚ, TRUNC(876.567,1)
+SELECT '876.567' AS ìˆ«ìž, TRUNC(876.567,1)
     FROM dual;
 
-SELECT '876.567' AS ¼ýÀÚ, TRUNC(876.567,2)
+SELECT '876.567' AS ìˆ«ìž, TRUNC(876.567,2)
     FROM dual;
 
-SELECT '876.567' AS ¼ýÀÚ, TRUNC(876.567,0)
+SELECT '876.567' AS ìˆ«ìž, TRUNC(876.567,0)
     FROM dual;
     
-SELECT '876.567' AS ¼ýÀÚ, TRUNC(876.567,-1)
+SELECT '876.567' AS ìˆ«ìž, TRUNC(876.567,-1)
     FROM dual;    
 
-SELECT '876.567' AS ¼ýÀÚ, TRUNC(876.567,-2)
+SELECT '876.567' AS ìˆ«ìž, TRUNC(876.567,-2)
     FROM dual;    
---25.  ³ª´« ³ª¸ÓÁö °ªÀ» Ãâ·ÂÇÏ±â MOD
+-- 25.  ë‚˜ëˆˆ ë‚˜ë¨¸ì§€ ê°’ì„ ì¶œë ¥í•˜ê¸° MOD
 
 SELECT MOD(10, 3)
     FROM dual;
     
-SELECT empno,ename ,MOD(empno, 2) AS Â¦È¦¼ö
+SELECT empno,ename ,MOD(empno, 2) AS ì§í™€ìˆ˜
     FROM emp;
 
 SELECT empno,ename
     FROM emp
     WHERE  MOD(empno, 2) = 1;
     
--- Âü°í·Î ¸òÀº FLOORÇÔ¼ö¸¦ ÀÌ¿ëÇÑ´Ù
+--  ì°¸ê³ ë¡œ ëª«ì€ FLOORí•¨ìˆ˜ë¥¼ ì´ìš©í•œë‹¤
 
 
 SELECT FLOOR(10/3)
     FROM dual;
--- mysqlÀÇ °æ¿ì FLOORÇÔ¼ö´Â ÀÛ°Å³ª °¡Àå Å« Á¤¼ö¸¦ ¹ÝÈ¯ÇÏ´Â ÀÇ¹Ì·Î ¾²ÀÎ´Ù. ¿À¶óÅ¬ÀÌ¶û ´Ù¸¥ÀÇ¹ÌÀÇ ÇÔ¼öÀÓ.
+--  mysqlì˜ ê²½ìš° FLOORí•¨ìˆ˜ëŠ” ìž‘ê±°ë‚˜ ê°€ìž¥ í° ì •ìˆ˜ë¥¼ ë°˜í™˜í•˜ëŠ” ì˜ë¯¸ë¡œ ì“°ì¸ë‹¤. ì˜¤ë¼í´ì´ëž‘ ë‹¤ë¥¸ì˜ë¯¸ì˜ í•¨ìˆ˜ìž„.
 
 
---26. ³¯Â¥ °£ °³¿ù ¼ö Ãâ·ÂÇÏ±â 
+-- 26. ë‚ ì§œ ê°„ ê°œì›” ìˆ˜ ì¶œë ¥í•˜ê¸° 
 
--- MONTHS_BETWEEN(ÃÖ½Å³¯Â¥, ¿¹Àü³¯Â¥)
+--  MONTHS_BETWEEN(ìµœì‹ ë‚ ì§œ, ì˜ˆì „ë‚ ì§œ)
 
 /*
 
- TIMESTAMPDIFF(´ÜÀ§, ³¯Â¥1, ³¯Â¥2) 
- MYSQLÀº ÀÌ·¸°Ô ÇÑ´Ù.
- ´ÜÀ§
- SECOND : ÃÊ
- MINUTE : ºÐ
- HOUR : ½Ã
- DAY : ÀÏ
- WEEK : ÁÖ
- MONTH : ¿ù
- QUARTER : ºÐ±â
- YEAR : ¿¬
+ TIMESTAMPDIFF(ë‹¨ìœ„, ë‚ ì§œ1, ë‚ ì§œ2) 
+ MYSQLì€ ì´ë ‡ê²Œ í•œë‹¤.
+ ë‹¨ìœ„
+ SECOND : ì´ˆ
+ MINUTE : ë¶„
+ HOUR : ì‹œ
+ DAY : ì¼
+ WEEK : ì£¼
+ MONTH : ì›”
+ QUARTER : ë¶„ê¸°
+ YEAR : ì—°
 
  
 */
@@ -184,33 +184,33 @@ SELECT FLOOR(10/3)
 SELECT ename, MONTHS_BETWEEN(sysdate, hiredate)
     FROM emp;
 
---³¯Â¥°£ ÀÏ¼ö´Â ÀÌ·¸°Ô °è»êÇÑ´Ù.
+-- ë‚ ì§œê°„ ì¼ìˆ˜ëŠ” ì´ë ‡ê²Œ ê³„ì‚°í•œë‹¤.
 
-SELECT  TO_DATE('2021-06-10', 'RRRR-MM-DD') -  TO_DATE('2019-06-10', 'RRRR-MM-DD') AS ÀÏ¼ö
+SELECT  TO_DATE('2021-06-10', 'RRRR-MM-DD') -  TO_DATE('2019-06-10', 'RRRR-MM-DD') AS ì¼ìˆ˜
     FROM dual;
 
---27. °³¿ù ¼ö ´õÇÑ ³¯Â¥ Ãâ·ÂÇÏ±â 
+-- 27. ê°œì›” ìˆ˜ ë”í•œ ë‚ ì§œ ì¶œë ¥í•˜ê¸° 
 
---2021³â 5¿ù 1ÀÏ·Î ºÎÅÍ 100´ÞµÚ´Â ¾î¶»°ÔµÇ´ÂÁö?
+-- 2021ë…„ 5ì›” 1ì¼ë¡œ ë¶€í„° 100ë‹¬ë’¤ëŠ” ì–´ë–»ê²Œë˜ëŠ”ì§€?
 
-SELECT ADD_MONTHS(TO_DATE('2021-05-01', 'RRRR-MM-DD'), 100) AS "³¯Â¥ ´õÇÏ±â"
+SELECT ADD_MONTHS(TO_DATE('2021-05-01', 'RRRR-MM-DD'), 100) AS "ë‚ ì§œ ë”í•˜ê¸°"
     FROM dual;
 
---ÀÌ·¸°Ô Ç¥Çö ÇÒ ¼öµµ ÀÖ´Ù.
+-- ì´ë ‡ê²Œ í‘œí˜„ í•  ìˆ˜ë„ ìžˆë‹¤.
 
 SELECT TO_DATE('2021-05-01', 'RRRR-MM-DD') + interval '100' month
     FROM dual;
 
---interval ÀÌ¿ëÇÏ¿© 1³â 3°³¿ùÀ» ÀÌ·¸°Ô Ç¥Çö ÇÒ ¼öµµ ÀÖ´Ù.
+-- interval ì´ìš©í•˜ì—¬ 1ë…„ 3ê°œì›”ì„ ì´ë ‡ê²Œ í‘œí˜„ í•  ìˆ˜ë„ ìžˆë‹¤.
 
 SELECT TO_DATE('2021-05-01', 'RRRR-MM-DD') + interval '1-3' year(1) to month
     FROM dual;
 
---3³â 5°³¿ù ÈÄÀÇ ³¯Â¥    
-SELECT TO_DATE('2021-05-01', 'RRRR-MM-DD') + TO_YMINTERVAL('03-05') AS ³¯Â¥
+-- 3ë…„ 5ê°œì›” í›„ì˜ ë‚ ì§œ    
+SELECT TO_DATE('2021-05-01', 'RRRR-MM-DD') + TO_YMINTERVAL('03-05') AS ë‚ ì§œ
     FROM dual;
 
---MYSQLÀº ÀÌ·¸°Ô »ç¿ëÇÑ´Ù.
+-- MYSQLì€ ì´ë ‡ê²Œ ì‚¬ìš©í•œë‹¤.
 /*
 
 ADDDATE(date, INTERVAL value addunit)
@@ -239,61 +239,61 @@ YEAR_MONTH
 */
 
 
---28.   Æ¯Á¤ ³¯Â¥ µÚ¿¡ ¿À´Â ¿äÀÏ ³¯Â¥ Ãâ·ÂÇÏ±â
+-- 28.   íŠ¹ì • ë‚ ì§œ ë’¤ì— ì˜¤ëŠ” ìš”ì¼ ë‚ ì§œ ì¶œë ¥í•˜ê¸°
 
--- 2019³â 5¿ù 22ÀÏ ·ÎºÎÅÍ ¹Ù·Î µ¹¾Æ¿Ã ¿ù¿äÀÏÀÇ ³¯Â¥°¡ ¾î¶»°ÔµÇ´ÂÁö Ãâ·ÂÇØº¸ÀÚ. 
--- MYSQL¿¡¼­´Â Áö¿øÇÏÁö ¾Ê´Â ±â´É.
+--  2019ë…„ 5ì›” 22ì¼ ë¡œë¶€í„° ë°”ë¡œ ëŒì•„ì˜¬ ì›”ìš”ì¼ì˜ ë‚ ì§œê°€ ì–´ë–»ê²Œë˜ëŠ”ì§€ ì¶œë ¥í•´ë³´ìž. 
+--  MYSQLì—ì„œëŠ” ì§€ì›í•˜ì§€ ì•ŠëŠ” ê¸°ëŠ¥.
 
-SELECT '2021/09/03' as ³¯Â¥, NEXT_DAY('2021/09/03', '¿ù¿äÀÏ') as "´ÙÀ½ ¿ù¿äÀÏ" 
+SELECT '2021/09/03' as ë‚ ì§œ, NEXT_DAY('2021/09/03', 'ì›”ìš”ì¼') as "ë‹¤ìŒ ì›”ìš”ì¼" 
     FROM DUAL;
 
 
---29.  Æ¯Á¤ ³¯Â¥°¡ ÀÖ´Â ´ÞÀÇ ¸¶Áö¸· ³¯Â¥ Ãâ·ÂÇÏ±â
+-- 29.  íŠ¹ì • ë‚ ì§œê°€ ìžˆëŠ” ë‹¬ì˜ ë§ˆì§€ë§‰ ë‚ ì§œ ì¶œë ¥í•˜ê¸°
 
--- MYSQL¿¡¼­ Áö¿øÇÏ´Â ±â´É
+--  MYSQLì—ì„œ ì§€ì›í•˜ëŠ” ê¸°ëŠ¥
 
-SELECT '2021/09/03' as ³¯Â¥, LAST_DAY('2021/09/03') as "¸¶Áö¸· ³¯Â¥"
+SELECT '2021/09/03' as ë‚ ì§œ, LAST_DAY('2021/09/03') as "ë§ˆì§€ë§‰ ë‚ ì§œ"
     FROM dual;
     
-SELECT TRUNC(LAST_DAY('2021/09/03') - sysdate) AS ³²Àº³¯
+SELECT TRUNC(LAST_DAY('2021/09/03') - sysdate) AS ë‚¨ì€ë‚ 
     FROM dual;
 
 
 
---30.  ¹®ÀÚÇüÀ¸·Î µ¥ÀÌÅÍ À¯Çü º¯È¯ÇÏ±â
+-- 30.  ë¬¸ìží˜•ìœ¼ë¡œ ë°ì´í„° ìœ í˜• ë³€í™˜í•˜ê¸°
 
--- MYSQL FORMAT, CHAR_FORMAT À¸·Î ´ëÃ¼
+--  MYSQL FORMAT, CHAR_FORMAT ìœ¼ë¡œ ëŒ€ì²´
 
-SELECT ename, TO_CHAR(hiredate, 'DAY') as ¿äÀÏ, TO_CHAR(sal, '999,999') as ¿ù±Þ
+SELECT ename, TO_CHAR(hiredate, 'DAY') as ìš”ì¼, TO_CHAR(sal, '999,999') as ì›”ê¸‰
     FROM emp;
     
 SELECT ename, hiredate
     FROM emp
     WHERE TO_CHAR(hiredate, 'RRRR') = '1981';
 
-SELECT ename, EXTRACT(year from hiredate) as ¿¬µµ, 
-              EXTRACT(MONTH from hiredate) as ´Þ,
-              EXTRACT(day from hiredate) as ¿äÀÏ
+SELECT ename, EXTRACT(year from hiredate) as ì—°ë„, 
+              EXTRACT(MONTH from hiredate) as ë‹¬,
+              EXTRACT(day from hiredate) as ìš”ì¼
     FROM emp;
 
 SELECT *
     FROM emp;
 
---31.  ³¯Â¥ÇüÀ¸·Î µ¥ÀÌÅÍ À¯Çü º¯È¯ÇÏ±â TO_DATE
+-- 31.  ë‚ ì§œí˜•ìœ¼ë¡œ ë°ì´í„° ìœ í˜• ë³€í™˜í•˜ê¸° TO_DATE
 
 
---32. ¾Ï½ÃÀû Çü º¯È¯ ÀÌÇØÇÏ±â 
+-- 32. ì•”ì‹œì  í˜• ë³€í™˜ ì´í•´í•˜ê¸° 
 
 SELECT  ename, sal
     FROM emp
     WHERE sal = '3000';
 
---¼ýÀÚÇüÀ» '3000' À¸·Î ¹®ÀÚÇüÀ¸·Î ºñ±³ÇÏ¿´À½¿¡µµ ºÒ±¸ÇÏ°í °Ë»ö°á°ú°¡ Ãâ·Â µÊÀ» ¾Ë ¼ö ÀÖ´Ù.
---ÀÌ´Â ¿À¶óÅ¬ÀÌ ¾Ë¾Æ¼­ '¼ýÀÚÇü = ¼ýÀÚÇü' À¸·Î Çü º¯È¯À» ÇÏ±â ¶§¹®¿¡ ¿¡·¯°¡ ¹ß»ýÇÏÁö ¾Ê°í °Ë»öµÇ´Â °ÍÀÌ´Ù. 
+-- ìˆ«ìží˜•ì„ '3000' ìœ¼ë¡œ ë¬¸ìží˜•ìœ¼ë¡œ ë¹„êµí•˜ì˜€ìŒì—ë„ ë¶ˆêµ¬í•˜ê³  ê²€ìƒ‰ê²°ê³¼ê°€ ì¶œë ¥ ë¨ì„ ì•Œ ìˆ˜ ìžˆë‹¤.
+-- ì´ëŠ” ì˜¤ë¼í´ì´ ì•Œì•„ì„œ 'ìˆ«ìží˜• = ìˆ«ìží˜•' ìœ¼ë¡œ í˜• ë³€í™˜ì„ í•˜ê¸° ë•Œë¬¸ì— ì—ëŸ¬ê°€ ë°œìƒí•˜ì§€ ì•Šê³  ê²€ìƒ‰ë˜ëŠ” ê²ƒì´ë‹¤. 
 
---33. NULL °ª ´ë½Å ´Ù¸¥ µ¥ÀÌÅÍ Ãâ·ÂÇÏ±â (NVL, NVL2)
+-- 33. NULL ê°’ ëŒ€ì‹  ë‹¤ë¥¸ ë°ì´í„° ì¶œë ¥í•˜ê¸° (NVL, NVL2)
 
--- Mysql IFNULLÇÔ¼ö.
+--  Mysql IFNULLí•¨ìˆ˜.
 
 SELECT COMM 
     FROM EMP;
@@ -310,26 +310,26 @@ SELECT COMM
     WHERE job in('SALESMAN', 'ANALYST');   
     
     
---34.   IF¹®À» SQL·Î ±¸ÇöÇÏ±â. (DECODE ÇÔ¼ö)
+-- 34.   IFë¬¸ì„ SQLë¡œ êµ¬í˜„í•˜ê¸°. (DECODE í•¨ìˆ˜)
 
- SELECT ename, deptno, DECODE(deptno, 10, 300, 20, 400, 0) AS º¸³Ê½º 
+ SELECT ename, deptno, DECODE(deptno, 10, 300, 20, 400, 0) AS ë³´ë„ˆìŠ¤ 
     FROM emp;
 
--- ºÎ¼­¹øÈ£°¡ 10ÀÏ¶§´Â 300, 20ÀÏ¶§´Â 400 ³ª¸ÓÁö´Â 0 as º¸³Ê½º 
+--  ë¶€ì„œë²ˆí˜¸ê°€ 10ì¼ë•ŒëŠ” 300, 20ì¼ë•ŒëŠ” 400 ë‚˜ë¨¸ì§€ëŠ” 0 as ë³´ë„ˆìŠ¤ 
 
- SELECT empno, mod(empno, 2) AS ³ª¸ÓÁö, DECODE(mod(empno, 2), 0, 'Â¦¼ö', 1, 'È¦¼ö') AS Â¦È¦¼ö
+ SELECT empno, mod(empno, 2) AS ë‚˜ë¨¸ì§€, DECODE(mod(empno, 2), 0, 'ì§ìˆ˜', 1, 'í™€ìˆ˜') AS ì§í™€ìˆ˜
     FROM emp;
 
--- default °ªÀº »ý·« ÇÒ ¼öµµ ÀÖ´Ù.    
+--  default ê°’ì€ ìƒëžµ í•  ìˆ˜ë„ ìžˆë‹¤.    
 
--- Mysql¿¡´Â ifÇÔ¼ö°¡ ÀÖ´Ù
+--  Mysqlì—ëŠ” ifí•¨ìˆ˜ê°€ ìžˆë‹¤
 
--- IF(Á¶°Ç,'Á¶°ÇÀÌ ÀÏÄ¡ÇÒ °æ¿ìÀÇ VALUE','Á¶°ÇÀÌ ÀÏÄ¡ÇÏÁö ¾ÊÀ»°æ¿ìÀÇ VALUE')
+--  IF(ì¡°ê±´,'ì¡°ê±´ì´ ì¼ì¹˜í•  ê²½ìš°ì˜ VALUE','ì¡°ê±´ì´ ì¼ì¹˜í•˜ì§€ ì•Šì„ê²½ìš°ì˜ VALUE')
 
 
---35. IF¹®À» SQL·Î ±¸ÇöÇÏ±â. (CASE)
+-- 35. IFë¬¸ì„ SQLë¡œ êµ¬í˜„í•˜ê¸°. (CASE)
 
--- Mysql¿¡¼­µµ »ç¿ë ÇÒ ¼ö ÀÖ´Ù.
+--  Mysqlì—ì„œë„ ì‚¬ìš© í•  ìˆ˜ ìžˆë‹¤.
 
  SELECT ename, job, sal, CASE WHEN sal >= 3000 THEN 500
                              WHEN sal >= 2000 THEN 300
@@ -339,7 +339,7 @@ SELECT COMM
     WHERE job IN ('SALESMAN', 'ANALYST');
     
     
---36. ÃÖ´ñ°ª Ãâ·ÂÇÏ±â (MAX)
+-- 36. ìµœëŒ“ê°’ ì¶œë ¥í•˜ê¸° (MAX)
 
  SELECT MAX(sal)
     FROM emp;
@@ -348,28 +348,28 @@ SELECT COMM
     FROM emp
     WHERE job = 'SALESMAN';
  
---  SELECT job, MAX(sal)
---    FROM emp
---    WHERE job = 'SALESMAN';  
--- job Ä®·³Àº ¿©·¯ °³ÀÇ ÇàÀÌ Ãâ·ÂµÇ·Á°í ÇÏ´Âµ¥ ¸Æ½º °ªÀº ÇÏ³ª°¡ Ãâ·Â µÇ·Á ÇÏ±â¶§¹®¿¡ ¿¡·¯°¡ ¶á´Ù. 
+--   SELECT job, MAX(sal)
+--     FROM emp
+--     WHERE job = 'SALESMAN';  
+--  job ì¹¼ëŸ¼ì€ ì—¬ëŸ¬ ê°œì˜ í–‰ì´ ì¶œë ¥ë˜ë ¤ê³  í•˜ëŠ”ë° ë§¥ìŠ¤ ê°’ì€ í•˜ë‚˜ê°€ ì¶œë ¥ ë˜ë ¤ í•˜ê¸°ë•Œë¬¸ì— ì—ëŸ¬ê°€ ëœ¬ë‹¤. 
 
  SELECT job, MAX(sal)
     FROM emp
     WHERE job = 'SALESMAN'
     GROUP BY job;
     
---37. ÃÖ¼Ò°ª Ãâ·ÂÇÏ±â (MIN) 
+-- 37. ìµœì†Œê°’ ì¶œë ¥í•˜ê¸° (MIN) 
 
--- ±×·ìÇÔ¼öÀÇ Æ¯Â¡Àº WHERE ÀýÀÇ Á¶°ÇÀÌ °ÅÁþÀÌ¾îµµ °á°ú¸¦ Ç×»ó  Ãâ·ÂÇÑ´Ù´Â °ÍÀÌ´Ù. 
+--  ê·¸ë£¹í•¨ìˆ˜ì˜ íŠ¹ì§•ì€ WHERE ì ˆì˜ ì¡°ê±´ì´ ê±°ì§“ì´ì–´ë„ ê²°ê³¼ë¥¼ í•­ìƒ  ì¶œë ¥í•œë‹¤ëŠ” ê²ƒì´ë‹¤. 
 
---38. Æò±Õ°ª Ãâ·ÂÇÏ±â (AVG)
+-- 38. í‰ê· ê°’ ì¶œë ¥í•˜ê¸° (AVG)
 
 SELECT AVG(comm)
     FROM emp;
 
---±×·ìÇÔ¼ö´Â ³Î°ªÀ» ¹«½ÃÇÑ´Ù. ±×·¯´Ï±î Ä¿¹Ì¼Ç ÃÑÇÕ¿¡¼­ 14¸¦ ³ª´«°ÍÀÌ ¾Æ´Ï¶ó 4¸¦ ³ª´«°ÍÀÌ´Ù.   
+-- ê·¸ë£¹í•¨ìˆ˜ëŠ” ë„ê°’ì„ ë¬´ì‹œí•œë‹¤. ê·¸ëŸ¬ë‹ˆê¹Œ ì»¤ë¯¸ì…˜ ì´í•©ì—ì„œ 14ë¥¼ ë‚˜ëˆˆê²ƒì´ ì•„ë‹ˆë¼ 4ë¥¼ ë‚˜ëˆˆê²ƒì´ë‹¤.   
 
---39. ÅäÅ»°ª Ãâ·ÂÇÏ±â(SUM)
+-- 39. í† íƒˆê°’ ì¶œë ¥í•˜ê¸°(SUM)
 
 SELECT job, sum(sal)
     from emp
@@ -380,102 +380,125 @@ SELECT job, SUM(sal)
     GROUP BY job
     HAVING sum(sal) >= 4000;
 
---where Àý¿¡ ±×·ìÇÔ¼ö¸¦ »ç¿ëÇØ Á¶°ÇÀ» ÁÖ¸é ±×·ì ÇÔ¼ö »ç¿ëÀÌ Çã°¡µÇÁö¾Ê´Â´Ù°í ¶á´Ù. having À» »ç¿ëÇÏ¿©¾ßÇÑ´Ù. 
+-- where ì ˆì— ê·¸ë£¹í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•´ ì¡°ê±´ì„ ì£¼ë©´ ê·¸ë£¹ í•¨ìˆ˜ ì‚¬ìš©ì´ í—ˆê°€ë˜ì§€ì•ŠëŠ”ë‹¤ê³  ëœ¬ë‹¤. having ì„ ì‚¬ìš©í•˜ì—¬ì•¼í•œë‹¤. 
 
---40. °Ç¼ö Ãâ·ÂÇÏ±â COUNT (±×·ìÇÔ¼ö´Â null °ªÀ» Æ÷ÇÔÇÏÁö ¾Ê´Â´Ù´Â °ÍÀ» À¯³äÇØ¾ßÇÑ´Ù. )
+-- 40. ê±´ìˆ˜ ì¶œë ¥í•˜ê¸° COUNT (ê·¸ë£¹í•¨ìˆ˜ëŠ” null ê°’ì„ í¬í•¨í•˜ì§€ ì•ŠëŠ”ë‹¤ëŠ” ê²ƒì„ ìœ ë…í•´ì•¼í•œë‹¤. )
 
 
---41. µ¥ÀÌÅÍ ºÐ¼® ÇÔ¼ö·Î ¼øÀ§ Ãâ·ÂÇÏ±â (RANK)
+-- 41. ë°ì´í„° ë¶„ì„ í•¨ìˆ˜ë¡œ ìˆœìœ„ ì¶œë ¥í•˜ê¸° (RANK)
 
-SELECT ename, job, sal, RANK() over (ORDER BY sal DESC) ¼øÀ§ 
-    FROM emp
-    WHERE job in ('ANALYST','MANAGER');
+SELECT * FROM 
+	emp;
+    
+    
+
+-- 2ë“±ì´ ë‘ëª…ì´ë¼ 3ë“±ì´ ì¶œë ¥ë˜ì§€ ì•Šì•˜ë‹¤. 3ë“±ì„ ì¶œë ¥í•˜ê¸° ìœ„í•´ì„œëŠ” DENSE_RANK() í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•˜ì—¬ì•¼ í•œë‹¤.
+SELECT ename, job, sal, RANK() over (ORDER BY sal DESC) ìˆœìœ„ 
+    FROM emp;
     
    
-    
-SELECT ename, job, sal, RANK() over (PARTITION BY job
-                                     ORDER BY sal DESC) ¼øÀ§ 
+-- ì§ì—…ë³„ íŒŒí‹°ì…˜ì„ ì¤˜ì„œ ìˆœìœ„ë¥¼ ë§¤ê¸°ê³  ì‹¶ì„ ê²½ìš°     
+SELECT ename, job, sal, RANK() over (PARTITION BY job ORDER BY sal DESC) ìˆœìœ„ 
     FROM emp;
---42. µ¥ÀÌÅÍ ºÐ¼® ÇÔ¼ö·Î ¼øÀ§ Ãâ·ÂÇÏ±â (DENSE_RANK)
+    
+    
+-- 42. ë°ì´í„° ë¶„ì„ í•¨ìˆ˜ë¡œ ìˆœìœ„ ì¶œë ¥í•˜ê¸° (DENSE_RANK)
 
-SELECT ename, job, sal, DENSE_RANK() over (ORDER BY sal DESC) ¼øÀ§ 
+SELECT ename, job, sal, DENSE_RANK() over (ORDER BY sal DESC) ìˆœìœ„ 
     FROM emp
     WHERE job in ('ANALYST','MANAGER');
     
 SELECT ename, job, sal, DENSE_RANK() over (PARTITION BY job
-                                     ORDER BY sal DESC) ¼øÀ§ 
+                                     ORDER BY sal DESC) ìˆœìœ„ 
     FROM emp;    
---43. µ¥ÀÌÅÍ ºÐ¼® ÇÔ¼ö·Î µî±Þ Ãâ·ÂÇÏ±â (NTILE)
+
+
+-- 43. ë°ì´í„° ë¶„ì„ í•¨ìˆ˜ë¡œ ë“±ê¸‰ ì¶œë ¥í•˜ê¸° (NTILE)
+
+INSERT INTO EMP VALUES (7521,'WARD','CLERT',7698,'81-02-23',NULL,500,30);
+COMMIT;
+
+SELECT*FROM EMP;
 
 SELECT ename, job, sal, 
-       NTILE(4) over(order by sal desc nulls last) µî±Þ
+       NTILE(4) over(order by sal desc) ë“±ê¸‰ 
     FROM emp
     WHERE job in ('ANALYST','MANAGER','CLERK');
-    
---NULLS LAST ¸¦ »ç¿ëÇßÀ» ¶§´Â NULL °ªÀÌ ¸¶Áö¸·À¸·Î Á¤·ÄµË´Ï´Ù.    
+-- NULLS LAST ë¥¼ ì‚¬ìš©í–ˆì„ ë•ŒëŠ” NULL ê°’ì´ ë§ˆì§€ë§‰ìœ¼ë¡œ ì •ë ¬ë©ë‹ˆë‹¤. (ì˜¤ë¼í´)
+-- Mysqlì—ì„œëŠ” nullì€ ë“±ê¸‰ê³„ì‚°ì— í¬í•¨ë˜ì§€ ì•ŠëŠ”ë‹¤.
 
---44.  µ¥ÀÌÅÍ ºÐ¼® ÇÔ¼ö·Î ¼øÀ§ÀÇ ºñÀ² Ãâ·ÂÇÏ±â (CUME_DIST)
 
-SELECT ename, sal, RANK() over (order by sal desc) as RANK,
-                   DENSE_RANK() over (order by sal desc) as DENSE_RANK,
-                   TRUNC(CUME_DIST() over(order by sal desc), 2) as  CUM_DIST
+-- 44.  ë°ì´í„° ë¶„ì„ í•¨ìˆ˜ë¡œ ìˆœìœ„ì˜ ë¹„ìœ¨ ì¶œë ¥í•˜ê¸° (CUME_DIST)
+
+SELECT ename, sal, RANK() over (order by sal desc) as ìˆœìœ„,
+                   DENSE_RANK() over (order by sal desc) as ìˆœìœ„2,
+                   TRUNCATE(CUME_DIST() over(order by sal desc), 2) as  CUM_DIST
     FROM emp;
 
-SELECT ename, sal, job, RANK() over (PARTITION BY job order by sal desc) as RANK,
-                        TRUNC(CUME_DIST() over(PARTITION BY job order by sal desc), 2) as  CUM_DIST
+SELECT ename, sal, job, RANK() over (PARTITION BY job order by sal desc) as 'RANK',
+                        TRUNCATE(CUME_DIST() over(PARTITION BY job order by sal desc), 2) as  CUM_DIST
     FROM emp;
 
---45. µ¥ÀÌÅÍ ºÐ¼® ÇÔ¼ö·Î µ¥ÀÌÅÍ¸¦ °¡·Î·Î Ãâ·ÂÇÏ±â(LISTAGG)
+-- 45. ë°ì´í„° ë¶„ì„ í•¨ìˆ˜ë¡œ ë°ì´í„°ë¥¼ ê°€ë¡œë¡œ ì¶œë ¥í•˜ê¸°(LISTAGG)
 
+/* 
 SELECT job, LISTAGG(ename, '/') within group (ORDER BY sal desc) as EMPLOYEE,
             LISTAGG(sal, '/') within group (ORDER BY sal desc) as SAL
     FROM emp
     GROUP BY job;
+*/
 
-SELECT job, LISTAGG(ename||'('||sal||')',',') within group (ORDER BY sal desc) as EMPLOYEE
-    FROM emp
-    GROUP BY job;    
+-- mysqlì—ì„œëŠ” ì´ë ‡ê²Œì“´ë‹¤.
+
+SELECT job, GROUP_CONCAT(ename SEPARATOR ' / ') AS ENAME,
+			GROUP_CONCAT(sal SEPARATOR ' / ') AS SAL
+  FROM emp
+  group by job;
+
     
---46. µ¥ÀÌÅÍ ºÐ¼® ÇÔ¼ö·Î ¹Ù·Î Àü Çà°ú ´ÙÀ½ Çà Ãâ·ÂÇÏ±â (LAG, LEAD)
+-- 46. ë°ì´í„° ë¶„ì„ í•¨ìˆ˜ë¡œ ë°”ë¡œ ì „ í–‰ê³¼ ë‹¤ìŒ í–‰ ì¶œë ¥í•˜ê¸° (LAG, LEAD)
 
+-- ìˆ«ìž 1ë„£ìœ¼ë©´ ì „í–‰, 2ë„£ìœ¼ë©´ ì „ì „í–‰ì„ ì¶œë ¥í•œë‹¤.
 SELECT empno, ename, sal,
-            NVL(LAG(sal, 1) over (order by sal asc), 0) AS ÀüÇà,
-            LEAD(sal, 1) over (order by sal asc) "´ÙÀ½ Çà"
+            IFNULL(LAG(sal, 1) over (order by sal asc), 0) AS ì „í–‰,
+            IFNULL(LEAD(sal, 1) over (order by sal asc), 0) AS "ë‹¤ìŒ í–‰"
     FROM emp
     WHERE job in ('ANALYST','MANAGER');
 
---47. SUM+DECODE ¸¦ È°¿ëÇÏ¿© ROWÀ» COLUMN·Î Ãâ ·ÂÇÏ±â 
+
+-- 47. SUM+DECODE ë¥¼ í™œìš©í•˜ì—¬ ROWì„ COLUMNë¡œ ì¶œ ë ¥í•˜ê¸° 
+
+-- Mysql
+SELECT SUM(IF(job = 'ANALYST',sal , 0)) as "ANALYST",
+       SUM(IF(job = 'CLERK',sal , 0)) as "CLERK",
+       SUM(IF(job = 'MANAGER',sal , 0)) as "MANAGER",
+       SUM(IF(job = 'SALESMAN',sal , 0)) as "SALESMAN"
+    FROM emp;
+    
+/* 
+ORACLE    
 
 SELECT SUM(DECODE(job, 'ANALYST', sal)) as "ANALYST",
        SUM(DECODE(job, 'CLERK', sal)) as "CLERK",
        SUM(DECODE(job, 'MANAGER', sal)) as "MANAGER",
        SUM(DECODE(job, 'SALESMAN', sal)) as "SALESMAN"
     FROM emp;
+*/
+    
 
---48. PIVOTÀ» È°¿ëÇÏ¿© ROWÀ» COLUMN·Î Ãâ ·ÂÇÏ±â 
+-- 48. PIVOTì„ í™œìš©í•˜ì—¬ ROWì„ COLUMNë¡œ ì¶œ ë ¥í•˜ê¸° 
 
+/*
 SELECT *
     FROM (select deptno, sal from emp)
     PIVOT (sum(sal) for deptno in (10,20,30));
 
---FROM Àý¿¡ °ýÈ£¸¦ »ç¿ëÇØ¼­ Æ¯Á¤ ÄÃ·³¸¸ ¼±ÅÃÇØ¾ßÇÑ´Ù.    
-
--- Á¤Ã³±â ½Ç½À¿ë Äõ¸® 
-
-Create table ¼ºÀû (
-°ú¸ñÄÚµå number not null,
-°ú¸ñÀÌ¸§ varchar2(50) not null,
-ÇÐÁ¡ varchar2(50) not null,
-Á¡¼ö number not null);
-
-insert into ¼ºÀû values (1000, '¿î¿µÃ¼Á¦', 'B', 80);
-
-SELECT °ú¸ñÀÌ¸§, MAX(Á¡¼ö) AS ÃÖ´ëÁ¡¼ö, MIN(Á¡¼ö) AS ÃÖ¼ÒÁ¡¼ö FROM ¼ºÀû GROUP BY °ú¸ñÀÌ¸§ HAVING °ú¸ñÀÌ¸§ = 'ÄÄÇ»ÅÍ°úÇÐ';
+-- FROM ì ˆì— ê´„í˜¸ë¥¼ ì‚¬ìš©í•´ì„œ íŠ¹ì • ì»¬ëŸ¼ë§Œ ì„ íƒí•´ì•¼í•œë‹¤. 
+-- mysqlì—ì„œëŠ” ì‚¬ìš© í•  ìˆ˜ ì—†ë‹¤ 47ê³¼ ê°™ì´ êµ¬í˜„ì´ ê°€ëŠ¥í•˜ë‹¤.   
+*/
 
 
-
-
---49. COLUMN TO ROW
+-- 49. COLUMN TO ROW
 
 drop  table order2;
 
@@ -496,67 +519,67 @@ SELECT *
 
 SELECT * 
     FROM order2
-    UNPIVOT (°Ç¼ö for ¾ÆÀÌÅÛ in (bicycle, camera, notebook));
+    UNPIVOT (ê±´ìˆ˜ for ì•„ì´í…œ in (bicycle, camera, notebook));
 
---NULL °ªÀÌ ROW¿¡ Æ÷ÇÔµÇ¾îÀÖÀ» °æ¿ì °á°ú°¡ Ãâ·ÂµÇÁö¾Ê´Â´Ù. µ¥ÀÌÅÍ¿¡ NULL°ªÀÌ Æ÷ÇÔµÇ¾î ÀÖ´Â °æ¿ì, UNPIVOT INCLUDE NULLS ¶ó°í ½áÁà¾ßÇÑ´Ù. 
+-- NULL ê°’ì´ ROWì— í¬í•¨ë˜ì–´ìžˆì„ ê²½ìš° ê²°ê³¼ê°€ ì¶œë ¥ë˜ì§€ì•ŠëŠ”ë‹¤. ë°ì´í„°ì— NULLê°’ì´ í¬í•¨ë˜ì–´ ìžˆëŠ” ê²½ìš°, UNPIVOT INCLUDE NULLS ë¼ê³  ì¨ì¤˜ì•¼í•œë‹¤. 
     
---50. µ¥ÀÌÅÍ ºÐ¼® ÇÔ¼ö·Î ´©Àû µ¥ÀÌÅÍ Ãâ·ÂÇÏ±â (SUM OVER) 
+-- 50. ë°ì´í„° ë¶„ì„ í•¨ìˆ˜ë¡œ ëˆ„ì  ë°ì´í„° ì¶œë ¥í•˜ê¸° (SUM OVER) 
 
-SELECT empno, ename, sal, SUM(sal) OVER(ORDER BY empno ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) ´©ÀûÄ¡
+SELECT empno, ename, sal, SUM(sal) OVER(ORDER BY empno ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) ëˆ„ì ì¹˜
     FROM emp
     WHERE job in ('ANALYST', 'MANAGER');
 
---  UNBOUNDED PRECEDINGÀº Á¦ÀÏ Ã¹ ¹øÂ° ÇàÀ» °¡¸®Åµ´Ï´Ù. BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW ¶õ Á¦ÀÏ Ã¹ ¹øÂ° ÇàºÎÅÍ ÇöÀç Çà±îÁöÀÇ °ªÀ» ¸»ÇÕ´Ï´Ù. 
---  Âü°í·Î UNBOUNDED FOLLOWING Àº ¸Ç ¸¶Áö¸· ÇàÀ» °¡¸®Åµ´Ï´Ù. 
+--   UNBOUNDED PRECEDINGì€ ì œì¼ ì²« ë²ˆì§¸ í–‰ì„ ê°€ë¦¬í‚µë‹ˆë‹¤. BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW ëž€ ì œì¼ ì²« ë²ˆì§¸ í–‰ë¶€í„° í˜„ìž¬ í–‰ê¹Œì§€ì˜ ê°’ì„ ë§í•©ë‹ˆë‹¤. 
+--   ì°¸ê³ ë¡œ UNBOUNDED FOLLOWING ì€ ë§¨ ë§ˆì§€ë§‰ í–‰ì„ ê°€ë¦¬í‚µë‹ˆë‹¤. 
 
---51. µ¥ÀÌÅÍ ºÐ¼® ÇÔ¼ö·Î ºñÀ² Ãâ·ÂÇÏ±â (RATIO_TO_REPORT) 
+-- 51. ë°ì´í„° ë¶„ì„ í•¨ìˆ˜ë¡œ ë¹„ìœ¨ ì¶œë ¥í•˜ê¸° (RATIO_TO_REPORT) 
 
-SELECT empno, ename, sal, RATIO_TO_REPORT(sal) OVER () AS ºñÀ² 
+SELECT empno, ename, sal, RATIO_TO_REPORT(sal) OVER () AS ë¹„ìœ¨ 
     FROM emp
     WHERE deptno = 20;
 
-SELECT empno, ename, sal, RATIO_TO_REPORT(sal) OVER () AS ºñÀ²,
-                          SAL/SUM(sal) OVER() as "ºñ±³ ºñÀ²"  
+SELECT empno, ename, sal, RATIO_TO_REPORT(sal) OVER () AS ë¹„ìœ¨,
+                          SAL/SUM(sal) OVER() as "ë¹„êµ ë¹„ìœ¨"  
     FROM emp
     WHERE deptno = 20;    
 
---52. µ¥ÀÌÅÍ ºÐ¼®ÇÔ¼ö·Î Áý°è °á°ú Ãâ·ÂÇÏ±â -- 1 (ROLLUP)
+-- 52. ë°ì´í„° ë¶„ì„í•¨ìˆ˜ë¡œ ì§‘ê³„ ê²°ê³¼ ì¶œë ¥í•˜ê¸° --  1 (ROLLUP)
 
 SELECT job, sum(sal)
     FROM emp
     GROUP BY ROLLUP(job);
 
---ROLLUP ¿¡ Ä®·³À» µÎ°³ »ç¿ëÇÑ °æ¿ì. 
+-- ROLLUP ì— ì¹¼ëŸ¼ì„ ë‘ê°œ ì‚¬ìš©í•œ ê²½ìš°. 
 
 SELECT deptno, job, sum(sal) 
     FROM emp
     GROUP BY ROLLUP(deptno, job);
     
---53.  µ¥ÀÌÅÍ ºÐ¼®ÇÔ¼ö·Î Áý°è °á°ú Ãâ·ÂÇÏ±â -- 2 (CUBE)
+-- 53.  ë°ì´í„° ë¶„ì„í•¨ìˆ˜ë¡œ ì§‘ê³„ ê²°ê³¼ ì¶œë ¥í•˜ê¸° --  2 (CUBE)
 
 SELECT deptno,job, sum(sal)
     FROM emp
     GROUP BY CUBE(deptno,job);
 
--- ROLLUP Áý°è¿Í CUBE Áý°è´Â ¼ø¼­»Ó¸¸ ¾Æ´Ï¶ó Ãâ·Â°á°úµµ ´Ù¸£´Ù.!
+--  ROLLUP ì§‘ê³„ì™€ CUBE ì§‘ê³„ëŠ” ìˆœì„œë¿ë§Œ ì•„ë‹ˆë¼ ì¶œë ¥ê²°ê³¼ë„ ë‹¤ë¥´ë‹¤.!
 
 
---54. µ¥ÀÌÅÍ ºÐ¼®ÇÔ¼ö·Î Áý°è °á°ú Ãâ·ÂÇÏ±â --3 (GROUPING SETS)
+-- 54. ë°ì´í„° ë¶„ì„í•¨ìˆ˜ë¡œ ì§‘ê³„ ê²°ê³¼ ì¶œë ¥í•˜ê¸° -- 3 (GROUPING SETS)
 
 SELECT deptno, job, sum(sal)
     FROM emp
     GROUP BY GROUPING SETS((deptno), (job), ()); 
 
---55. µ¥ÀÌÅÍ ºÐ¼® ÇÔ¼ö·Î Ãâ·Â °á°ú ³Ñ¹ö¸µ ÇÏ±â (ROW_NUMBER)
+-- 55. ë°ì´í„° ë¶„ì„ í•¨ìˆ˜ë¡œ ì¶œë ¥ ê²°ê³¼ ë„˜ë²„ë§ í•˜ê¸° (ROW_NUMBER)
 
 SELECT empno, ename, sal, RANK() OVER(ORDER BY sal desc) RANK,
                           DENSE_RANK() OVER(ORDER BY sal desc) DENSE_RANK,  
-                          ROW_NUMBER() OVER(ORDER BY sal desc) ¹øÈ£
+                          ROW_NUMBER() OVER(ORDER BY sal desc) ë²ˆí˜¸
     FROM emp;
     
--- ºÎ¼­¹øÈ£º°·Î ÆÄÆ¼¼Ç ÁÙ °æ¿ì
+--  ë¶€ì„œë²ˆí˜¸ë³„ë¡œ íŒŒí‹°ì…˜ ì¤„ ê²½ìš°
 
 SELECT empno, ename, sal, RANK() OVER(PARTITION BY deptno ORDER BY sal desc) RANK,
                           DENSE_RANK() OVER(PARTITION BY deptno ORDER BY sal desc) DENSE_RANK,  
-                          ROW_NUMBER() OVER(PARTITION BY deptno ORDER BY sal desc) ¹øÈ£
+                          ROW_NUMBER() OVER(PARTITION BY deptno ORDER BY sal desc) ë²ˆí˜¸
     FROM emp;
