@@ -499,14 +499,17 @@ SELECT *
 
 
 -- 49. COLUMN TO ROW
+/*
+use mysql;
 
 drop  table order2;
 
-create table order2
-( ename  varchar2(10),
-  bicycle  number(10),
-  camera   number(10),
-  notebook  number(10) );
+create table order2( 
+  ename  varchar(10),
+  bicycle  int,
+  camera   int,
+  notebook  int 
+);
 
 insert  into  order2  values('SMITH', 2,3,1);
 insert  into  order2  values('ALLEN',1,2,3 );
@@ -514,7 +517,7 @@ insert  into  order2  values('KING',3,2,2 );
 
 commit;
 
-SELECT *
+SELECT * 
     FROM order2;
 
 SELECT * 
@@ -522,7 +525,10 @@ SELECT *
     UNPIVOT (건수 for 아이템 in (bicycle, camera, notebook));
 
 -- NULL 값이 ROW에 포함되어있을 경우 결과가 출력되지않는다. 데이터에 NULL값이 포함되어 있는 경우, UNPIVOT INCLUDE NULLS 라고 써줘야한다. 
-    
+-- MySQL 에서는 pivot, unpivot절을 사용  할 수 없다.  
+  
+ */  
+  
 -- 50. 데이터 분석 함수로 누적 데이터 출력하기 (SUM OVER) 
 
 SELECT empno, ename, sal, SUM(sal) OVER(ORDER BY empno ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) 누적치
@@ -530,56 +536,87 @@ SELECT empno, ename, sal, SUM(sal) OVER(ORDER BY empno ROWS BETWEEN UNBOUNDED PR
     WHERE job in ('ANALYST', 'MANAGER');
 
 --   UNBOUNDED PRECEDING은 제일 첫 번째 행을 가리킵니다. BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW 란 제일 첫 번째 행부터 현재 행까지의 값을 말합니다. 
+
+/*
+
+누적치를 계산하기 위한 표현식 
+
+ORDER BY 정렬기준 ROWS BETWEEN A AND B
+
+UNBOUNDED PRECEDING 맨 첫번째 행을 가르킨다
+UNBOUNDED FOLLOWING 맨 마지막 행을 가르킨다.
+CURRENT ROW 현재 행 
+
+*/
+
 --   참고로 UNBOUNDED FOLLOWING 은 맨 마지막 행을 가리킵니다. 
 
--- 51. 데이터 분석 함수로 비율 출력하기 (RATIO_TO_REPORT) 
+-- 51. 전체 중 비율 구하기 (RATIO_TO_REPORT) 
 
+/*
 SELECT empno, ename, sal, RATIO_TO_REPORT(sal) OVER () AS 비율 
     FROM emp
     WHERE deptno = 20;
+    
+    MYSQL에서 동작 안함
+*/
 
-SELECT empno, ename, sal, RATIO_TO_REPORT(sal) OVER () AS 비율,
-                          SAL/SUM(sal) OVER() as "비교 비율"  
-    FROM emp
-    WHERE deptno = 20;    
+-- 전체중 얼마의 비율? RATIO_TO_REPORT없어도 이렇게 구현하면 된다.
+ 
+SELECT empno, ename, sal, SAL/SUM(sal) OVER () AS 비율 
+    FROM emp;
+
 
 -- 52. 데이터 분석함수로 집계 결과 출력하기 --  1 (ROLLUP)
 
-SELECT job, sum(sal)
-    FROM emp
-    GROUP BY ROLLUP(job);
+-- SELECT job, sum(sal)
+--     FROM emp
+--     GROUP BY ROLLUP(job);
 
--- ROLLUP 에 칼럼을 두개 사용한 경우. 
+-- -- ROLLUP 에 칼럼을 두개 사용한 경우. 
+
+-- SELECT deptno, job, sum(sal) 
+--     FROM emp
+--     GROUP BY ROLLUP(deptno, job);
 
 SELECT deptno, job, sum(sal) 
-    FROM emp
-    GROUP BY ROLLUP(deptno, job);
+     FROM emp
+     GROUP BY JOB WITH ROLLUP;
+
+SELECT deptno, job, sum(sal) 
+     FROM emp
+     GROUP BY DEPTNO, JOB WITH ROLLUP;
+     
+-- MYSQL 에서는 이렇게 쓴다
+
     
 -- 53.  데이터 분석함수로 집계 결과 출력하기 --  2 (CUBE)
 
-SELECT deptno,job, sum(sal)
-    FROM emp
-    GROUP BY CUBE(deptno,job);
+-- SELECT deptno,job, sum(sal)
+--   FROM emp
+--   GROUP BY CUBE(deptno,job);
 
 --  ROLLUP 집계와 CUBE 집계는 순서뿐만 아니라 출력결과도 다르다.!
-
+--  MYSQL에서는 동작하지 않는다.
 
 -- 54. 데이터 분석함수로 집계 결과 출력하기 -- 3 (GROUPING SETS)
 
+/* 
 SELECT deptno, job, sum(sal)
     FROM emp
     GROUP BY GROUPING SETS((deptno), (job), ()); 
+*/
 
 -- 55. 데이터 분석 함수로 출력 결과 넘버링 하기 (ROW_NUMBER)
 
-SELECT empno, ename, sal, RANK() OVER(ORDER BY sal desc) RANK,
-                          DENSE_RANK() OVER(ORDER BY sal desc) DENSE_RANK,  
-                          ROW_NUMBER() OVER(ORDER BY sal desc) 번호
+SELECT ROW_NUMBER() OVER(ORDER BY sal desc) 번호,
+	   empno, ename, sal, RANK() OVER(ORDER BY sal desc) "RANK",
+       DENSE_RANK() OVER(ORDER BY sal desc) "DENSE_RANK"
     FROM emp;
     
 --  부서번호별로 파티션 줄 경우
 
-SELECT empno, ename, sal, RANK() OVER(PARTITION BY deptno ORDER BY sal desc) RANK,
-                          DENSE_RANK() OVER(PARTITION BY deptno ORDER BY sal desc) DENSE_RANK,  
+SELECT empno, ename, sal, RANK() OVER(PARTITION BY deptno ORDER BY sal desc) "RANK",
+                          DENSE_RANK() OVER(PARTITION BY deptno ORDER BY sal desc) "DENSE_RANK",  
                           ROW_NUMBER() OVER(PARTITION BY deptno ORDER BY sal desc) 번호
     FROM emp;
