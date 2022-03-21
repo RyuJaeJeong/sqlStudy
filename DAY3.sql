@@ -210,6 +210,23 @@ SELECT ename, sal, job, deptno
     
 -- 마이너스 연산자를 이용하여 위쪽 쿼리의 결과 데이터에서 아래쪽 쿼리의 결과데이터의 차이를 출력하는 쿼리문이다. 
 -- 마이너스 연산자의 경우에도 데이터를 내림차순으로 정렬해준다
+-- mysql에서는 minus를 사용 할 수 없다.
+
+use mysql;
+
+SELECT * FROM emp;
+
+-- 이런식으로 구현 하면 된다.
+SELECT ename, sal, job, deptno
+	FROM emp
+    WHERE deptno in(10, 20) AND 
+    (ename, sal, job, deptno) not in 
+		(SELECT ename, sal, job, deptno 
+			FROM emp 
+			WHERE deptno in (20, 30));
+
+
+
 
 -- 71. 서브쿼리 사용하기 1 --  단일행 서브쿼리
 
@@ -267,7 +284,7 @@ SELECT *
                     FROM emp e 
                     WHERE e.deptno = d.deptno);                    
                     
--- 75. 서브쿼리 사용하기5 (HAVING절의 서브쿼리 사용하기)
+-- 75. 서브쿼리 사용하기 5 (HAVING절의 서브쿼리 사용하기)
 
 SELECT job, sum(sal)
     FROM emp
@@ -324,11 +341,16 @@ commit;
 -- DROP 테이블자체를 삭제한다. 
 
 -- 81. 데이터 저장 및 취소하기 (COMMIT, ROLLBACK) 
+
+-- ROLLBACK 직전 COMMIT 지점으로 돌아갑니다.
+
 -- 82. 데이터 입력, 수정, 삭제 한번에하기(MERGE) 
 
-ALTER TABLE emp
-ADD loc varchar2(10);
+use mysql;
 
+ALTER TABLE emp
+ADD loc varchar(10);
+/*
 MERGE INTO emp e
 USING dept d
 ON (e.deptno = d.deptno)
@@ -336,6 +358,12 @@ WHEN MATCHED THEN
 UPDATE set e.loc = d.loc
 WHEN NOT MATCHED THEN
 INSERT (e.empno, e.deptno, e.loc) values (1111, d.deptno, d.loc);
+*/
+
+-- mysql에서는 사용 할 수 없다. mysql에서는 insert문 뒤에 ON DUPLICATE KEY 문을 사용하여 
+-- 중복되는 값을 update문으로 돌리는 기능이 있다. 
+
+
 
 SELECT *
     FROM emp;
@@ -345,10 +373,16 @@ SELECT *
 /*
 update문을 수행하면 update 대상이 되는 행을 잠궈버립니다.
 update는 행 전체를 잠그기 때문에 jones월급 뿐만 아니라 다른 컬럼들의 데이터도 변경 할 수 없고 waiting하게 됩니다.
+데이터의 일관성을 보장하기 위해 
 */
 
 -- 84. select from update 절 이해하기.
+
+-- 조회하는 행에 락을 건다.
+
 -- 85. 서브쿼리를 사용하여 데이터 입력하기. 
+
+-- insert select문, 한번에 여러 데이터를 입력하는 것이 가능하다.
 
 CREATE TABLE emp2
 AS
