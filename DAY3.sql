@@ -401,15 +401,16 @@ SELECT *
 
 -- 86. 서브 쿼리를 사용하여 데이터 수정하기.    
 
-/*
+use mysql;
+
 UPDATE emp
     SET sal = ( SELECT sal FROM emp WHERE ename='ALLEN')
     WHERE job = 'SALESMAN';
     
 ROLLBACK;    
-직업이 SALESMAN 인 사월들의 월급을 ALLEN의 월급으로 갱신합니다.
+-- 직업이 SALESMAN 인 사월들의 월급을 ALLEN의 월급으로 갱신합니다.
+-- workbench mysql safe update mode 
 
-*/
 
 -- 87. 서브쿼리를 사용하여 데이터 삭제하기
 
@@ -424,7 +425,10 @@ WHERE sal > (SELECT sal FROM emp s WHERE s.deptno = m.deptno);
 
 -- 88. 서브쿼리를 사용하여 데이터 합치기. 
 
-ALTER TABLE dept ADD sumsal number(10);
+-- mysql에서는 merge문을 지원하지 않는다.
+
+ALTER TABLE dept 
+	ADD sumsal int;
 
 MERGE INTO dept d
 USING (SELECT deptno, sum(sal) sumsal 
@@ -434,7 +438,8 @@ ON (d.deptno = v.deptno)
 WHEN MATCHED THEN
 UPDATE set d.sumsal = v.sumsal;
 
--- 89. 계층형 질의문으로 서열을 주고 데이터 출력하기.1
+
+-- 89. 계층형 질의문으로 서열을 주고 데이터 출력하기.  1
  SELECT rpad(' ', LEVEL*3) || ename as employee, level, sal, job
     FROM emp
     START WITH ename = 'KING'       -- 루트 노드의 데이터를 지정합니다.
@@ -453,11 +458,16 @@ SELECT ename, SYS_CONNECT_BY_PATH(ename, '/') as path
     START WITH ename='KING'
     CONNECT BY prior empno = mgr;
     
+-- 오라클에서 start with connect by구문으로 계층형 쿼리를 지원한다.
+-- 하지만 mysql에서는 계층형 쿼리를 지원하지 않고
+-- 구글에서 함수를 이용하여 계층형질의를 구현한 사례들이 있다.
+    
+    
 -- 93. 일반 테이블 생성하기
 CREATE TABLE EMP01(
-EMPNO NUMBER(10),
-ENAME VARCHAR2(10),
-SAL NUMBER(10,2),   --  숫자 전체 10자리 허용하는데 그중 소숫점 2자리를 허용하겠다. 즉 소수점이 아닌 자리는 8자리까지만 허용되는 것이다.ㅔ
+EMPNO int
+ENAME VARCHAR(10),
+SAL int,   --  숫자 전체 10자리 허용하는데 그중 소숫점 2자리를 허용하겠다. 즉 소수점이 아닌 자리는 8자리까지만 허용되는 것이다.ㅔ
 HIREDATE DATE);
 
 /*
