@@ -464,11 +464,17 @@ SELECT ename, SYS_CONNECT_BY_PATH(ename, '/') as path
     
     
 -- 93. 일반 테이블 생성하기
+
+use mysql;
+
 CREATE TABLE EMP01(
-EMPNO int
-ENAME VARCHAR(10),
-SAL int,   --  숫자 전체 10자리 허용하는데 그중 소숫점 2자리를 허용하겠다. 즉 소수점이 아닌 자리는 8자리까지만 허용되는 것이다.ㅔ
-HIREDATE DATE);
+	EMPNO int,
+	ENAME VARCHAR(10),
+	SAL int,   
+	HIREDATE DATE
+);
+
+--  숫자 전체 10자리 허용하는데 그중 소숫점 2자리를 허용하겠다. 즉 소수점이 아닌 자리는 8자리까지만 허용되는 것이다.ㅔ
 
 /*
 테이블명, 컬럼명 지정시 규칙
@@ -485,6 +491,25 @@ CLOB 문자 데이터 유형이며 최대 4GB의 문자 데이터를 허용합�
 BLOB 바이너리 데이터 유형 최대 4기가
 NUMBER
 DATE
+
+테이블 생성시 사용할 수 있는 데이터 유형(Mysql)
+CHAR(n) 고정 길이 데이터 타입
+VARCHAR(n) 가변 길이 데이터 타입
+TINYTEXT(n) 
+EXT(n) 
+MEDIUMTEXT(n) 
+LONGTEXT(n) 
+
+INT 
+
+DATE
+TIME
+DATETIME
+TIMESTAMP
+YEAR
+등등....
+
+
 */
 
 -- 94. 임시 테이블 생성하기.
@@ -498,6 +523,17 @@ ON COMMIT DELETE ROWS;
 /*
 ON COMMIT DELETE ROWS : 임시 테이블에 데이터를 입력하고 COMMIT 할 때 까지만 데이터를 보관합니다.
 ON COMMIT PRESERVE ROWS : 임시 테이블에 데이터를 입력하고 세션이 종료될 때까지 데이터를 보관합니다. 그러니까 로그아웃하면 데이터 날아간다고
+
+mysql을 ON COMMIT DELETE ROWS는 지원하지 않고 ON COMMIT PRESERVE ROWS만 지원하는데 
+
+CREATE  TEMPORARY TABLE EMP37(
+	EMPNO int,
+	ENAME VARCHAR(10),
+	SAL int
+);
+
+이렇게 작성한다. 
+
 */
 -- 95.복잡한 쿼리를 단순하게 하기 (1) (VIEW)
 CREATE VIEW EMP_VIEW 
@@ -506,7 +542,7 @@ CREATE VIEW EMP_VIEW
         FROM emp
         WHERE job='SALESMAN';
 
-SELECT *
+SELECT *0
     FROM EMP_VIEW;
 /*
 EMP_VIEW의 데이터를 수정하면 EMP 테이블의 데이터가 변경되었습니다. 
@@ -524,8 +560,7 @@ SELECT deptno, round(avg(sal)) 평균월급
     FROM emp
     GROUP BY deptno;
 
-SELECT *
-    FROM EMP_VIEW2;
+SELECT * FROM EMP_VIEW2;
 
 /*
 함수나 그룹함수가 포함된 뷰를 복합 뷰라고 합니다. 
@@ -545,6 +580,7 @@ INCREMENT BY 1
 MAXVALUE 100
 NOCYCLE;
 
+-- mysql에서는 시퀀스를 지원하지 않는다.
 
 -- 99. 실수로 지운 데이터 복구하기 (1) FLASHBACK QUERY 
 
@@ -575,7 +611,7 @@ FLASHBACK TABLE emp to TIMESTAMP (SYSTIMESTAMP - INTERVAL '5' MINUTE);
 
 commit;
 
--- 101. 실수로 지운 데이터 복구하기 (2) FLASHBACK DROP
+-- 101. 실수로 지운 데이터 복구하기 (3) FLASHBACK DROP
 
 DROP TABLE emp;
 
@@ -585,7 +621,7 @@ FLASHBACK TABLE emp TO BEFORE DROP;
 
 commit;
 
--- 102. 실수로 지운 데이터 복구하기 (2) FLASHBACK VERSION QUERY 
+-- 102. 실수로 지운 데이터 복구하기 (4) FLASHBACK VERSION QUERY 
 
 SELECT ename, sal, versions_starttime, versions_endtime, versions_operation 
     FROM emp
@@ -595,7 +631,7 @@ SELECT ename, sal, versions_starttime, versions_endtime, versions_operation
     WHERE ename='KING'
     ORDER BY versions_starttime;
     
--- 103. 실수로 지운 데이터 복구하기 (2) FLASHBACK TRANSACTION QUERY 
+-- 103. 실수로 지운 데이터 복구하기 (5) FLASHBACK TRANSACTION QUERY 
 commit;
 
 
@@ -624,12 +660,21 @@ SELECT versions_startscn, versions_endscn, versions_operation, sal, deptno
     DB를 아카이브모드로 변경해줘야하나, 변경 후 오라클에 접속 할수없는 에러가 발생함. 아직까지 해결하지 못하고있음
     */
 
+-- 99~103 mysql에서 지원하지 않는다   https://hbesthee.tistory.com/967 참고
+
 -- 104. 데이터의 품질 높이기(PRIMARY KEY)
 
 CREATE TABLE DEPT2 (
-DEPTNO NUMBER(10) CONSTRAINT DEPT2_DEPTNO_PK PRIMARY KEY,
-DNAME VARCHAR2(13),
-LOC VARCHAR2(10));
+DEPTNO int CONSTRAINT DEPT2_DEPTNO_PK PRIMARY KEY,
+DNAME VARCHAR(13),
+LOC VARCHAR(10)
+);
+
+CREATE TABLE DEPT2 (
+DEPTNO int PRIMARY KEY,
+DNAME VARCHAR(13),
+LOC VARCHAR(10)
+);
 
 COMMIT;
 
@@ -639,13 +684,15 @@ SELECT a.CONSTRAINT_NAME, a.CONSTRAINT_TYPE, b.COLUMN_NAME
     FROM USER_CONSTRAINTS a, USER_CONS_COLUMNS b
     WHERE a.TABLE_NAME = 'DEPT2'
     AND a.CONSTRAINT_NAME = b.CONSTRAINT_NAME;
+
     
 -- 105. 데이터의 품질 높이기(UNIQUE)
 
 CREATE TABLE DEPT3 (
-DEPTNO NUMBER(10) ,
-DNAME VARCHAR2(13) CONSTRAINT DEPT2_DEPTNO_UN UNIQUE,
-LOC VARCHAR2(10));
+	DEPTNO int,
+	DNAME VARCHAR(13)  UNIQUE,
+	LOC VARCHAR(10)
+);
 
 SELECT a.CONSTRAINT_NAME, a.CONSTRAINT_TYPE, b.COLUMN_NAME
     FROM USER_CONSTRAINTS a, USER_CONS_COLUMNS b
@@ -684,6 +731,8 @@ SELECT JOB, SUM(SAL) as 토탈
     FROM EMP
     GROUP BY JOB 
     HAVING SUM(SAL) > (SELECT AVG(SUM(SAL)) FROM EMP GROUP BY JOB);
+    
+    -- 검색시간이 오래 걸리는 sql이 하나의 sql내에서 반복되어 사용될 때 성능을 높이기 위한 방법으로 with절을 사용한다.
 
 -- 110. WITH 절 사용하기 2 --  서브쿼리 팩토링 
 
