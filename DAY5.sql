@@ -102,8 +102,8 @@ DELIMITER ;
 
 */
 
-
-
+use mysql;
+select * from emp;
 -- 변수 선언 및 사용하는 법
 
 DELIMITER // 
@@ -122,3 +122,60 @@ CALL GETAVGSAL();
 
 
 -- 출처 : https://www.mysqltutorial.org/mysql-stored-procedure-tutorial.aspx
+
+
+-- 섹션2 : 프로시저에서 조건문 사용하기 
+
+--  IF 문 사용하기
+
+DELIMITER $$
+CREATE PROCEDURE GETEMPLEVELS(
+	IN empNum int, 
+    OUT empLevel varchar(20))
+BEGIN
+		DECLARE salary decimal default 0;
+        SELECT sal 
+        INTO salary 
+        FROM emp
+        where empno = empNum; 
+        
+        IF salary >= 5000 THEN
+			set empLevel = 'high';    
+		ELSEIF salary >= 2000 AND salary <3000 THEN
+			set empLevel = 'middle';
+        else    
+			set empLevel = 'row';
+        END IF;
+END $$
+DELIMITER ;  
+
+CALL GETEMPLEVELS('7654', @level);
+SELECT @level;
+
+-- CASE문 사용하기        
+
+DELIMITER $$
+CREATE PROCEDURE GETEMPLEVELSS(
+	IN empNum int, 
+    OUT empLevel varchar(20))
+BEGIN
+		DECLARE salary decimal default 0;
+        SELECT sal 
+        INTO salary 
+        FROM emp
+        where empno = empNum; 
+        
+        CASE salary 
+        when salary >= 5000 THEN
+			set empLevel = 'high';    
+		when salary >= 2000 AND salary <3000 THEN
+			set empLevel = 'middle';
+        else    
+			set empLevel = 'row';
+        END case;
+END $$
+DELIMITER ; 
+
+CALL GETEMPLEVELSS('7654', @level);
+SELECT @level;        
+    
